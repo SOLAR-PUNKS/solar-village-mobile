@@ -15,7 +15,7 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import { ReportFormModalProps, ReportFormData, ReportFormErrors } from '../types/report';
-import { Button, PrimaryButton } from './index';
+import { Button } from './index';
 
 const TITLE_MAX_LENGTH = 100;
 const DESCRIPTION_MAX_LENGTH = 500;
@@ -229,7 +229,7 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
                   <Button label="Cancel" onPress={handleClose} />
                 </View>
                 <View style={styles.submitButtonWrapper}>
-                  <PrimaryButton label="Submit" onPress={handleSubmit} />
+                  <Button label="Submit" onPress={handleSubmit} primary />
                 </View>
               </View>
             </ScrollView>

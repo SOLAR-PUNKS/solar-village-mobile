@@ -3,7 +3,7 @@ import { StyleSheet, View, Dimensions, ActivityIndicator, Text } from 'react-nat
 import MapView, { Region } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { useEffect, useState } from 'react';
-import { PrimaryButton, ReportFormModal, Toast } from '../components';
+import { Button, ReportFormModal, Toast } from '../components';
 import { ReportFormData, ToastMessage } from '../types/report';
 
 const { width } = Dimensions.get('window');
@@ -115,7 +115,7 @@ export default function HomeScreen() {
         showsUserLocation={true}
         showsMyLocationButton={true}
       />
-      <PrimaryButton label="Submit New Report" onPress={handleOpenModal} />
+      <Button label="Submit New Report" onPress={handleOpenModal} primary />
 
       {/* Report Form Modal */}
       <ReportFormModal

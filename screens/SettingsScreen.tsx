@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import { useState } from 'react';
 import Slider from '@react-native-community/slider';
-import { PrimaryButton, SettingsToggle } from '../components';
+import { Button, SettingsToggle } from '../components';
 
 export default function SettingsScreen() {
   // State management
@@ -70,7 +70,7 @@ export default function SettingsScreen() {
             onChange={setShowSchoolSupplies}
           />
         </View>
-        <PrimaryButton label="Apply" onPress={handleApply} />
+        <Button label="Apply" onPress={handleApply} primary />
       </View>
     </ScrollView>
   );
