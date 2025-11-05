@@ -1,6 +1,6 @@
 {
   "name": "solar-village",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "main": "index.tsx",
   "scripts": {
     "start": "expo start",
@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
+    "@react-native-community/slider": "5.0.1",
     "@react-navigation/bottom-tabs": "^7.7.3",
     "@react-navigation/native": "^7.1.19",
     "expo": "~54.0.22",
