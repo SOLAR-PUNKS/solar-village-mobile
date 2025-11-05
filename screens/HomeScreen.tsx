@@ -3,6 +3,7 @@ import { StyleSheet, View, Dimensions, ActivityIndicator, Text } from 'react-nat
 import MapView, { Region } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { useEffect, useState } from 'react';
+import { PrimaryButton } from '../components';
 
 const { width } = Dimensions.get('window');
 
@@ -77,6 +78,7 @@ export default function HomeScreen() {
         showsUserLocation={true}
         showsMyLocationButton={true}
       />
+      <PrimaryButton label="Submit New Report" onPress={() => {}} />
       <StatusBar style="auto" />
     </View>
   );

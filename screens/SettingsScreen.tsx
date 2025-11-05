@@ -1,7 +1,7 @@
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import { useState } from 'react';
 import Slider from '@react-native-community/slider';
-import SettingsToggle from '../components/SettingsToggle';
+import { PrimaryButton, SettingsToggle } from '../components';
 
 export default function SettingsScreen() {
   // State management
@@ -70,9 +70,7 @@ export default function SettingsScreen() {
             onChange={setShowSchoolSupplies}
           />
         </View>
-        <TouchableOpacity style={styles.applyButton} onPress={handleApply}>
-          <Text style={styles.applyButtonText}>Apply</Text>
-        </TouchableOpacity>
+        <PrimaryButton label="Apply" onPress={handleApply} />
       </View>
     </ScrollView>
   );
@@ -147,27 +145,6 @@ const styles = StyleSheet.create({
   sliderLabelText: {
     fontSize: 12,
     color: '#999',
-  },
-  applyButton: {
-    backgroundColor: '#2d5016',
-    paddingVertical: 16,
-    paddingHorizontal: 60,
-    borderRadius: 8,
-    marginTop: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  applyButtonText: {
-    color: '#ffffff',
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
   },
 });
 
