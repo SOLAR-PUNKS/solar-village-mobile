@@ -3,7 +3,8 @@ import { StyleSheet, View, Dimensions, ActivityIndicator, Text } from 'react-nat
 import MapView, { Region } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { useEffect, useState } from 'react';
-import { PrimaryButton } from '../components';
+import { PrimaryButton, ReportFormModal, Toast } from '../components';
+import { ReportFormData, ToastMessage } from '../types/report';
 
 const { width } = Dimensions.get('window');
 
@@ -14,6 +15,13 @@ export default function HomeScreen() {
   const [region, setRegion] = useState<Region | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [toast, setToast] = useState<ToastMessage>({
+    type: 'success',
+    message: '',
+    visible: false,
+  });
+
   const DEFAULT_REGION: Region = {
     latitude: 0,
     longitude: 0,
@@ -52,6 +60,35 @@ export default function HomeScreen() {
     })();
   }, []);
 
+  const handleOpenModal = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
+
+  const handleSubmitReport = (data: ReportFormData) => {
+    console.log('Report Submitted:');
+    console.log('Title:', data.title);
+    console.log('Description:', data.description);
+    console.log('Image URI:', data.imageUri);
+
+    // Close modal
+    setModalVisible(false);
+
+    // Show success toast
+    setToast({
+      type: 'success',
+      message: 'Report submitted successfully!',
+      visible: true,
+    });
+  };
+
+  const handleHideToast = () => {
+    setToast({ ...toast, visible: false });
+  };
+
   if (loading) {
     return (
       <View style={styles.container}>
@@ -78,7 +115,23 @@ export default function HomeScreen() {
         showsUserLocation={true}
         showsMyLocationButton={true}
       />
-      <PrimaryButton label="Submit New Report" onPress={() => {}} />
+      <PrimaryButton label="Submit New Report" onPress={handleOpenModal} />
+
+      {/* Report Form Modal */}
+      <ReportFormModal
+        visible={modalVisible}
+        onClose={handleCloseModal}
+        onSubmit={handleSubmitReport}
+      />
+
+      {/* Toast Notification */}
+      <Toast
+        visible={toast.visible}
+        message={toast.message}
+        type={toast.type}
+        onHide={handleHideToast}
+      />
+
       <StatusBar style="auto" />
     </View>
   );
