@@ -2,6 +2,7 @@ import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import { useState } from 'react';
 import Slider from '@react-native-community/slider';
 import { Button, SettingsToggle } from '../components';
+import { Colors } from '../theme';
 
 export default function SettingsScreen() {
   // State management
@@ -37,9 +38,9 @@ export default function SettingsScreen() {
             maximumValue={100}
             value={distance}
             onValueChange={setDistance}
-            minimumTrackTintColor="#2d5016"
+            minimumTrackTintColor={Colors.primary}
             maximumTrackTintColor="#d3d3d3"
-            thumbTintColor="#2d5016"
+            thumbTintColor={Colors.primary}
           />
           <View style={styles.sliderLabels}>
             <Text style={styles.sliderLabelText}>0</Text>
@@ -91,12 +92,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#2d5016',
+    color: Colors.primary,
     marginBottom: 10,
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
+    color: Colors.text.secondary,
     textAlign: 'center',
     marginBottom: 40,
   },
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#2d5016',
+    color: Colors.primary,
     marginBottom: 15,
   },
   sliderHeader: {
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
   valueText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#2d5016',
+    color: Colors.primary,
   },
   slider: {
     width: '100%',

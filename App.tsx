@@ -9,6 +9,8 @@ import HomeScreen from './screens/HomeScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import ChatScreen from './screens/ChatScreen';
 
+import { Colors } from './theme';
+
 const Tab = createBottomTabNavigator();
 
 export default function App() {
@@ -88,8 +90,8 @@ export default function App() {
 
             return <Ionicons name={iconName} size={iconSize} color={color} />;
           },
-          tabBarActiveTintColor: '#2d5016',
-          tabBarInactiveTintColor: '#8e8e93',
+          tabBarActiveTintColor: Colors.primary,
+          tabBarInactiveTintColor: Colors.inactive,
           tabBarStyle: {
             height: 70,
             paddingBottom: 10,

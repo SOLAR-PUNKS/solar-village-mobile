@@ -1,4 +1,5 @@
 import { StyleSheet, View, Text } from 'react-native';
+import { Colors } from '../theme';
 
 export default function ChatScreen() {
   return (
@@ -20,12 +21,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#2d5016',
+    color: Colors.primary,
     marginBottom: 10,
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
+    color: Colors.text.secondary,
     textAlign: 'center',
   },
 });

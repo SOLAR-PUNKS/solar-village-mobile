@@ -6,6 +6,7 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { Button, ReportFormModal, Toast } from '../components';
 import { ReportFormData, ToastMessage } from '../types/report';
 import { cacheLocation, getCachedLocation } from '../utils/locationCache';
+import { Colors } from '../theme';
 
 const { width } = Dimensions.get('window');
 
@@ -224,7 +225,7 @@ export default function HomeScreen() {
         showsUserLocation={locationAccuracy !== 'error'}
         showsMyLocationButton={locationAccuracy !== 'error'}
         loadingEnabled={true}
-        loadingIndicatorColor="#2d5016"
+        loadingIndicatorColor={Colors.primary}
         loadingBackgroundColor="#f5f5f5"
       />
       <Button label="Submit New Report" onPress={handleOpenModal} primary />
@@ -259,7 +260,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#2d5016',
+    color: Colors.primary,
     marginBottom: 10,
     textAlign: 'center',
     paddingHorizontal: 20,
@@ -296,7 +297,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 10,
     fontSize: 16,
-    color: '#666',
+    color: Colors.text.secondary,
   },
   errorText: {
     fontSize: 16,

@@ -16,6 +16,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import { ReportFormModalProps, ReportFormData, ReportFormErrors, ReportCategory } from '../types/report';
 import { Button } from './index';
+import { Colors } from '../theme';
 
 const CATEGORIES: ReportCategory[] = ['Food', 'Personal Hygiene', 'Clothing', 'School Supplies'];
 
@@ -170,7 +171,7 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
             <View style={styles.header}>
               <Text style={styles.headerTitle}>Submit New Report</Text>
               <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
-                <Ionicons name="close" size={28} color="#666" />
+                <Ionicons name="close" size={28} color={Colors.text.secondary} />
               </TouchableOpacity>
             </View>
 
@@ -234,7 +235,7 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
                   <Text style={[styles.categoryText, !category && styles.placeholderText]}>
                     {category || 'Select a category'}
                   </Text>
-                  <Ionicons name="chevron-down" size={24} color="#666" />
+                  <Ionicons name="chevron-down" size={24} color={Colors.text.secondary} />
                 </TouchableOpacity>
                 {errors.category && <Text style={styles.errorText}>{errors.category}</Text>}
               </View>
@@ -255,7 +256,7 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
                     <View style={styles.pickerHeader}>
                       <Text style={styles.pickerTitle}>Select Category</Text>
                       <TouchableOpacity onPress={() => setShowCategoryPicker(false)}>
-                        <Ionicons name="close" size={24} color="#666" />
+                        <Ionicons name="close" size={24} color={Colors.text.secondary} />
                       </TouchableOpacity>
                     </View>
                     {CATEGORIES.map((cat) => (
@@ -283,7 +284,7 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
                           {cat}
                         </Text>
                         {category === cat && (
-                          <Ionicons name="checkmark" size={24} color="#2d5016" />
+                          <Ionicons name="checkmark" size={24} color={Colors.primary} />
                         )}
                       </TouchableOpacity>
                     ))}
@@ -299,12 +300,12 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
                   <View style={styles.imagePreviewContainer}>
                     <Image source={{ uri: imageUri }} style={styles.imagePreview} />
                     <TouchableOpacity style={styles.removeImageButton} onPress={removeImage}>
-                      <Ionicons name="close-circle" size={32} color="#f44336" />
+                      <Ionicons name="close-circle" size={32} color={Colors.error} />
                     </TouchableOpacity>
                   </View>
                 ) : (
                   <TouchableOpacity style={styles.imagePickerButton} onPress={showImagePickerOptions}>
-                    <Ionicons name="camera-outline" size={32} color="#2d5016" />
+                    <Ionicons name="camera-outline" size={32} color={Colors.primary} />
                     <Text style={styles.imagePickerText}>Add Image (Optional)</Text>
                   </TouchableOpacity>
                 )}
@@ -354,7 +355,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#2d5016',
+    color: Colors.primary,
   },
   closeButton: {
     padding: 4,
@@ -376,7 +377,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   required: {
-    color: '#f44336',
+    color: Colors.error,
   },
   input: {
     borderWidth: 1,
@@ -398,7 +399,7 @@ const styles = StyleSheet.create({
     minHeight: 120,
   },
   inputError: {
-    borderColor: '#f44336',
+    borderColor: Colors.error,
   },
   charCount: {
     fontSize: 12,
@@ -408,7 +409,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 14,
-    color: '#f44336',
+    color: Colors.error,
     marginTop: 4,
   },
   categoryPicker: {
@@ -453,7 +454,7 @@ const styles = StyleSheet.create({
   pickerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#2d5016',
+    color: Colors.primary,
   },
   pickerOption: {
     flexDirection: 'row',
@@ -472,11 +473,11 @@ const styles = StyleSheet.create({
   },
   pickerOptionTextSelected: {
     fontWeight: '600',
-    color: '#2d5016',
+    color: Colors.primary,
   },
   imagePickerButton: {
     borderWidth: 2,
-    borderColor: '#2d5016',
+    borderColor: Colors.primary,
     borderStyle: 'dashed',
     borderRadius: 8,
     padding: 30,
@@ -486,7 +487,7 @@ const styles = StyleSheet.create({
   },
   imagePickerText: {
     fontSize: 16,
-    color: '#2d5016',
+    color: Colors.primary,
     fontWeight: '600',
     marginTop: 8,
   },

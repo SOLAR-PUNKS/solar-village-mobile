@@ -1,4 +1,5 @@
 import { StyleSheet, Text, Switch, View } from 'react-native';
+import { Colors } from '../theme';
 
 type Props = {
   label: string;
@@ -14,7 +15,7 @@ const SettingsToggle = ({label, onChange, value}: Props) => {
         value={value}
         onValueChange={onChange}
         trackColor={{ false: '#d3d3d3', true: '#7fb069' }}
-        thumbColor={value ? '#2d5016' : '#f4f3f4'}
+        thumbColor={value ? Colors.primary : '#f4f3f4'}
         ios_backgroundColor="#d3d3d3"
         />
     </View>

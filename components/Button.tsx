@@ -1,4 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Colors } from '../theme';
 
 type Props = {
   label: string;
@@ -29,7 +30,7 @@ export const Button = ({label, onPress, primary}: Props) => {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: Colors.neutral,
     paddingVertical: 16,
     paddingHorizontal: 40,
     borderRadius: 8,
@@ -46,14 +47,14 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#666',
+    color: Colors.text.secondary,
     textAlign: 'center',
   },
   primaryButton: {
-    backgroundColor: '#2d5016',
+    backgroundColor: Colors.primary,
   },
   primaryButtonText: {
-    color: '#ffffff',
+    color: Colors.text.primary,
   },
 });
 
