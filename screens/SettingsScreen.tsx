@@ -1,6 +1,7 @@
-import { StyleSheet, View, Text, Switch, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useState } from 'react';
 import Slider from '@react-native-community/slider';
+import SettingsToggle from '../components/SettingsToggle';
 
 export default function SettingsScreen() {
   // State management
@@ -48,48 +49,27 @@ export default function SettingsScreen() {
 
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>Show Me</Text>
-          <View style={styles.toggleRow}>
-            <Text style={styles.toggleLabel}>Food</Text>
-            <Switch
-              value={showFood}
-              onValueChange={setShowFood}
-              trackColor={{ false: '#d3d3d3', true: '#7fb069' }}
-              thumbColor={showFood ? '#2d5016' : '#f4f3f4'}
-              ios_backgroundColor="#d3d3d3"
-            />
-          </View>
-          <View style={styles.toggleRow}>
-            <Text style={styles.toggleLabel}>Personal Hygiene</Text>
-            <Switch
-              value={showHygiene}
-              onValueChange={setShowHygiene}
-              trackColor={{ false: '#d3d3d3', true: '#7fb069' }}
-              thumbColor={showHygiene ? '#2d5016' : '#f4f3f4'}
-              ios_backgroundColor="#d3d3d3"
-            />
-          </View>
-          <View style={styles.toggleRow}>
-            <Text style={styles.toggleLabel}>Clothing</Text>
-            <Switch
-              value={showClothing}
-              onValueChange={setShowClothing}
-              trackColor={{ false: '#d3d3d3', true: '#7fb069' }}
-              thumbColor={showClothing ? '#2d5016' : '#f4f3f4'}
-              ios_backgroundColor="#d3d3d3"
-            />
-          </View>
-          <View style={styles.toggleRow}>
-            <Text style={styles.toggleLabel}>School Supplies</Text>
-            <Switch
-              value={showSchoolSupplies}
-              onValueChange={setShowSchoolSupplies}
-              trackColor={{ false: '#d3d3d3', true: '#7fb069' }}
-              thumbColor={showSchoolSupplies ? '#2d5016' : '#f4f3f4'}
-              ios_backgroundColor="#d3d3d3"
-            />
-          </View>
+          <SettingsToggle
+            label="Food"
+            value={showFood}
+            onChange={setShowFood}
+          />
+          <SettingsToggle
+            label="Personal Hygiene"
+            value={showHygiene}
+            onChange={setShowHygiene}
+          />
+          <SettingsToggle
+            label="Clothing"
+            value={showClothing}
+            onChange={setShowClothing}
+          />
+          <SettingsToggle
+            label="School Supplies"
+            value={showSchoolSupplies}
+            onChange={setShowSchoolSupplies}
+          />
         </View>
-
         <TouchableOpacity style={styles.applyButton} onPress={handleApply}>
           <Text style={styles.applyButtonText}>Apply</Text>
         </TouchableOpacity>
@@ -167,19 +147,6 @@ const styles = StyleSheet.create({
   sliderLabelText: {
     fontSize: 12,
     color: '#999',
-  },
-  toggleRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  toggleLabel: {
-    fontSize: 16,
-    color: '#333',
-    fontWeight: '500',
   },
   applyButton: {
     backgroundColor: '#2d5016',
