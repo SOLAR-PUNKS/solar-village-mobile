@@ -1,1 +1,235 @@
-# solar-village
+# Solar Village
+
+A React Native mobile application built with Expo and TypeScript for connecting communities and sharing resources.
+
+## 📱 Project Overview
+
+Solar Village is a cross-platform mobile app that helps users discover and share resources within their community. The app features:
+
+- **Interactive Map View**: Real-time location tracking with user positioning on a map
+- **Customizable Settings**: Configure search preferences with distance slider (0-100 miles) and resource type toggles (Food, School Supplies)
+- **Location Services**: Automatic device location detection with permission handling
+
+## 🛠️ Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- **Node.js**: Version 20.17.0 or higher (20.19.4+ recommended)
+  - Download from [nodejs.org](https://nodejs.org/)
+  - Verify installation: `node --version`
+
+- **Package Manager**: npm (comes with Node.js) or yarn
+  - npm verify: `npm --version`
+  - yarn install (optional): `npm install -g yarn`
+
+- **Expo CLI**: Can be used via npx (recommended) or installed globally
+  - Global install (optional): `npm install -g expo-cli`
+
+- **Testing Platforms** (choose one or more):
+  - **Physical Device**: Install [Expo Go](https://expo.dev/client) app from App Store (iOS) or Google Play (Android)
+  - **iOS Simulator**: Requires macOS with Xcode installed
+  - **Android Emulator**: Requires Android Studio with AVD configured
+
+## 📦 Installation
+
+1. ** Clone the repository:**
+   ```bash
+   git clone https://github.com/Kibble/solar-village.git
+   ```
+
+2. **Navigate to the project directory:**
+   ```bash
+   cd solar-village
+   ```
+
+3. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+   Or if using yarn:
+   ```bash
+   yarn install
+   ```
+
+4. **Key packages included:**
+   - `expo` (~54.0.22) - Expo SDK
+   - `react-native` (0.81.5) - React Native framework
+   - `typescript` (^5.9.3) - TypeScript support
+   - `react-native-maps` (1.20.1) - Map component
+   - `expo-location` (~19.0.7) - Location services
+   - `@react-navigation/native` - Navigation framework
+   - `@react-navigation/bottom-tabs` - Bottom tab navigator
+   - `@react-native-community/slider` (5.0.1) - Slider component
+   - `expo-navigation-bar` - Android system UI control
+   - `@expo/vector-icons` - Icon library (Ionicons)
+
+## 🚀 Running the App
+
+### Start the Development Server
+
+```bash
+npm start
+```
+
+This will start the Metro bundler and display a QR code in your terminal.
+
+### Platform-Specific Launch Options
+
+Once the development server is running, you can launch the app on different platforms:
+
+#### iOS Simulator (macOS only)
+```bash
+# Press 'i' in the terminal, or run:
+npx expo start --ios
+```
+
+#### Android Emulator
+```bash
+# Press 'a' in the terminal, or run:
+npx expo start --android
+```
+
+#### Physical Device (Expo Go)
+1. Install the **Expo Go** app on your iOS or Android device
+2. Scan the QR code displayed in the terminal:
+   - **iOS**: Use the Camera app to scan the QR code
+   - **Android**: Use the Camera or Expo Go app to scan the QR code
+3. The app will load on your device
+
+#### Web Browser (Limited functionality)
+```bash
+# Press 'w' in the terminal, or run:
+npx expo start --web
+```
+
+**Note**: Some features like native maps and location services may not work properly in web mode.
+
+### 🔧 Development Build (For Full Features)
+
+Some features like **Android immersive mode** require a development build and won't work in Expo Go:
+
+```bash
+# Create a development build
+npx expo run:android
+# or
+npx expo run:ios
+```
+
+## 📁 Project Structure
+
+```
+solar-village/
+├── App.tsx                 # Main app component with navigation setup
+├── screens/
+│   ├── HomeScreen.tsx      # Map view with location tracking
+│   ├── ChatScreen.tsx      # Chat interface (placeholder)
+│   └── SettingsScreen.tsx  # Settings with slider and toggles
+├── app.json                # Expo configuration
+├── tsconfig.json           # TypeScript configuration
+├── package.json            # Dependencies and scripts
+└── assets/                 # Images and icons
+```
+
+### Key Files
+
+- **App.tsx**: Sets up React Navigation with bottom tabs, configures Android immersive mode
+- **screens/HomeScreen.tsx**: Displays map with user location, handles permissions
+- **screens/SettingsScreen.tsx**: Interactive settings with distance slider and resource toggles
+- **app.json**: Expo configuration including permissions (location, Android edge-to-edge)
+- **tsconfig.json**: TypeScript compiler configuration for React Native
+
+## 🧪 Development Notes
+
+### TypeScript Type Checking
+
+Run TypeScript compiler to check for type errors without emitting files:
+
+```bash
+npx tsc --noEmit
+```
+
+### Location Permissions
+
+The app requires location permissions to function properly:
+
+- **iOS**: Configured in `app.json` with `NSLocationWhenInUseUsageDescription`
+- **Android**: Requires `ACCESS_FINE_LOCATION` and `ACCESS_COARSE_LOCATION` permissions
+
+Users will be prompted to grant location access when the app first launches.
+
+### Platform-Specific Features
+
+#### Android Immersive Mode
+- Hides the system navigation bar (back, home, recent apps buttons)
+- Swipe up from bottom edge to temporarily reveal
+- Auto-hides after a few seconds
+- **Requires development build** - not available in Expo Go
+
+#### Map Tiles
+- **Android**: Uses Google Maps by default
+- **iOS**: Uses Apple Maps by default
+- Production builds may require additional API key configuration
+
+### Known Limitations
+
+1. **Expo Go Limitations**:
+   - Android immersive mode requires a development build
+   - Some native features may not work in Expo Go
+
+2. **Map API Keys**:
+   - For production builds, you may need to configure Google Maps API keys
+   - See [react-native-maps documentation](https://github.com/react-native-maps/react-native-maps) for details
+
+3. **Node Version**:
+   - Some packages show warnings for Node.js < 20.19.4
+   - App works with Node.js 20.17.0 but upgrading is recommended
+
+## 🎨 Design Theme
+
+The app uses a consistent green color scheme:
+
+- **Primary Color**: `#2d5016` (Dark Green)
+- **Secondary Color**: `#7fb069` (Light Green)
+- **Active States**: Green theme colors
+- **Inactive States**: Gray (`#8e8e93`)
+
+## 📝 Available Scripts
+
+```bash
+# Start development server
+npx expo start
+
+# Start with cache cleared
+npx expo start --clear
+
+# Run on iOS simulator
+npx expo start --ios
+
+# Run on Android emulator
+npx expo start --android
+
+# Run in web browser
+npx expo start --web
+
+# Type check
+npx tsc --noEmit
+
+# Create development build
+npx expo run:android
+npx expo run:ios
+```
+
+## 🤝 Contributing
+
+This is a development project. For any questions or issues, please refer to the project documentation.
+
+## 📄 License
+
+This project is part of the Solar Village initiative.
+
+---
+
+**Version**: 0.0.1
+**Built with**: React Native, Expo, TypeScript
+**Platform Support**: iOS, Android
