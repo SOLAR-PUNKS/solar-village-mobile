@@ -2,15 +2,19 @@
  * Report form data types
  */
 
+export type ReportCategory = 'Food' | 'Personal Hygiene' | 'Clothing' | 'School Supplies';
+
 export interface ReportFormData {
   title: string;
   description: string;
+  category: ReportCategory | null;
   imageUri: string | null;
 }
 
 export interface ReportFormErrors {
   title?: string;
   description?: string;
+  category?: string;
 }
 
 export interface ReportFormModalProps {

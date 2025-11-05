@@ -155,6 +155,7 @@ export default function HomeScreen() {
     console.log('Report Submitted:');
     console.log('Title:', data.title);
     console.log('Description:', data.description);
+    console.log('Category:', data.category);
     console.log('Image URI:', data.imageUri);
 
     // Close modal

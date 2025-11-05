@@ -14,8 +14,10 @@ import {
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
-import { ReportFormModalProps, ReportFormData, ReportFormErrors } from '../types/report';
+import { ReportFormModalProps, ReportFormData, ReportFormErrors, ReportCategory } from '../types/report';
 import { Button } from './index';
+
+const CATEGORIES: ReportCategory[] = ['Food', 'Personal Hygiene', 'Clothing', 'School Supplies'];
 
 const TITLE_MAX_LENGTH = 100;
 const DESCRIPTION_MAX_LENGTH = 500;
@@ -23,6 +25,8 @@ const DESCRIPTION_MAX_LENGTH = 500;
 export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFormModalProps) {
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
+  const [category, setCategory] = useState<ReportCategory | null>(null);
+  const [showCategoryPicker, setShowCategoryPicker] = useState<boolean>(false);
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [errors, setErrors] = useState<ReportFormErrors>({});
 
@@ -41,6 +45,10 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
       newErrors.description = `Description must be ${DESCRIPTION_MAX_LENGTH} characters or less`;
     }
 
+    if (!category) {
+      newErrors.category = 'Category is required';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -50,8 +58,10 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
       const formData: ReportFormData = {
         title: title.trim(),
         description: description.trim(),
+        category,
         imageUri,
       };
+      console.log('Report submitted:', formData);
       onSubmit(formData);
       resetForm();
     }
@@ -60,6 +70,7 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
   const resetForm = () => {
     setTitle('');
     setDescription('');
+    setCategory(null);
     setImageUri(null);
     setErrors({});
   };
@@ -149,8 +160,9 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
       onRequestClose={handleClose}
     >
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.modalContainer}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
@@ -162,7 +174,13 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
               </TouchableOpacity>
             </View>
 
-            <ScrollView style={styles.formContainer} showsVerticalScrollIndicator={false}>
+            <ScrollView
+              style={styles.formContainer}
+              contentContainerStyle={styles.formContentContainer}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+              bounces={true}
+            >
               {/* Title Field */}
               <View style={styles.fieldContainer}>
                 <Text style={styles.label}>
@@ -203,6 +221,75 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
                 </Text>
                 {errors.description && <Text style={styles.errorText}>{errors.description}</Text>}
               </View>
+
+              {/* Category Field */}
+              <View style={styles.fieldContainer}>
+                <Text style={styles.label}>
+                  Category <Text style={styles.required}>*</Text>
+                </Text>
+                <TouchableOpacity
+                  style={[styles.categoryPicker, errors.category && styles.inputError]}
+                  onPress={() => setShowCategoryPicker(true)}
+                >
+                  <Text style={[styles.categoryText, !category && styles.placeholderText]}>
+                    {category || 'Select a category'}
+                  </Text>
+                  <Ionicons name="chevron-down" size={24} color="#666" />
+                </TouchableOpacity>
+                {errors.category && <Text style={styles.errorText}>{errors.category}</Text>}
+              </View>
+
+              {/* Category Picker Modal */}
+              <Modal
+                visible={showCategoryPicker}
+                transparent={true}
+                animationType="fade"
+                onRequestClose={() => setShowCategoryPicker(false)}
+              >
+                <TouchableOpacity
+                  style={styles.pickerOverlay}
+                  activeOpacity={1}
+                  onPress={() => setShowCategoryPicker(false)}
+                >
+                  <View style={styles.pickerContainer}>
+                    <View style={styles.pickerHeader}>
+                      <Text style={styles.pickerTitle}>Select Category</Text>
+                      <TouchableOpacity onPress={() => setShowCategoryPicker(false)}>
+                        <Ionicons name="close" size={24} color="#666" />
+                      </TouchableOpacity>
+                    </View>
+                    {CATEGORIES.map((cat) => (
+                      <TouchableOpacity
+                        key={cat}
+                        style={[
+                          styles.pickerOption,
+                          category === cat && styles.pickerOptionSelected,
+                        ]}
+                        onPress={() => {
+                          setCategory(cat);
+                          setShowCategoryPicker(false);
+                          // Clear category error when selected
+                          if (errors.category) {
+                            setErrors({ ...errors, category: undefined });
+                          }
+                        }}
+                      >
+                        <Text
+                          style={[
+                            styles.pickerOptionText,
+                            category === cat && styles.pickerOptionTextSelected,
+                          ]}
+                        >
+                          {cat}
+                        </Text>
+                        {category === cat && (
+                          <Ionicons name="checkmark" size={24} color="#2d5016" />
+                        )}
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </TouchableOpacity>
+              </Modal>
 
               {/* Image Upload */}
               <View style={styles.fieldContainer}>
@@ -254,7 +341,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     maxHeight: '90%',
-    paddingBottom: 20,
+    width: '100%',
   },
   header: {
     flexDirection: 'row',
@@ -273,7 +360,11 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   formContainer: {
+    maxHeight: '100%',
+  },
+  formContentContainer: {
     padding: 20,
+    paddingBottom: 40,
   },
   fieldContainer: {
     marginBottom: 24,
@@ -320,6 +411,69 @@ const styles = StyleSheet.create({
     color: '#f44336',
     marginTop: 4,
   },
+  categoryPicker: {
+    borderWidth: 1,
+    borderColor: '#d3d3d3',
+    borderRadius: 8,
+    padding: 12,
+    backgroundColor: '#f9f9f9',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  categoryText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  placeholderText: {
+    color: '#999',
+  },
+  pickerOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  pickerContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    width: '100%',
+    maxWidth: 400,
+    maxHeight: '70%',
+  },
+  pickerHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  pickerTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#2d5016',
+  },
+  pickerOption: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+  },
+  pickerOptionSelected: {
+    backgroundColor: '#f0f7ed',
+  },
+  pickerOptionText: {
+    fontSize: 16,
+    color: '#333',
+  },
+  pickerOptionTextSelected: {
+    fontWeight: '600',
+    color: '#2d5016',
+  },
   imagePickerButton: {
     borderWidth: 2,
     borderColor: '#2d5016',
@@ -356,7 +510,8 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     gap: 12,
-    marginTop: 20,
+    marginTop: 32,
+    marginBottom: 8,
   },
   submitButtonWrapper: {
     flex: 1,
