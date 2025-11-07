@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Dimensions, ActivityIndicator, Text } from 'react-native';
-import MapView, { Region } from 'react-native-maps';
+// import MapView, { Region } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { Button, ReportFormModal, Toast } from '../components';
@@ -14,16 +14,16 @@ const { width } = Dimensions.get('window');
 const mapSize = Math.min(width * 0.85, 400);
 
 // Default region (San Francisco) - used as fallback
-const DEFAULT_REGION: Region = {
-  latitude: 37.7749,
-  longitude: -122.4194,
-  latitudeDelta: 0.0922,
-  longitudeDelta: 0.0421,
-};
+// const DEFAULT_REGION: Region = {
+//   latitude: 37.7749,
+//   longitude: -122.4194,
+//   latitudeDelta: 0.0922,
+//   longitudeDelta: 0.0421,
+// };
 
 export default function HomeScreen() {
   // Start with default region for immediate render
-  const [region, setRegion] = useState<Region>(DEFAULT_REGION);
+  // const [region, setRegion] = useState<Region>(DEFAULT_REGION);
   const [isLoadingLocation, setIsLoadingLocation] = useState<boolean>(true);
   const [locationAccuracy, setLocationAccuracy] = useState<'cached' | 'approximate' | 'precise' | 'error'>('cached');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -34,7 +34,7 @@ export default function HomeScreen() {
     visible: false,
   });
 
-  const mapRef = useRef<MapView>(null);
+  // const mapRef = useRef<MapView>(null);
   const hasAnimatedToLocation = useRef<boolean>(false);
 
   /**
@@ -51,7 +51,7 @@ export default function HomeScreen() {
         // STAGE 1: Try to load cached location first (instant)
         const cached = await getCachedLocation();
         if (cached && isMounted) {
-          setRegion(cached);
+          // setRegion(cached);
           setLocationAccuracy('cached');
           console.log('📍 Loaded cached location');
         }
@@ -72,25 +72,25 @@ export default function HomeScreen() {
           });
 
           if (isMounted) {
-            const newRegion: Region = {
-              latitude: approximateLocation.coords.latitude,
-              longitude: approximateLocation.coords.longitude,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            };
-            setRegion(newRegion);
+            // const newRegion: Region = {
+            //   latitude: approximateLocation.coords.latitude,
+            //   longitude: approximateLocation.coords.longitude,
+            //   latitudeDelta: 0.0922,
+            //   longitudeDelta: 0.0421,
+            // };
+            // setRegion(newRegion);
             setLocationAccuracy('approximate');
             setIsLoadingLocation(false);
             console.log('📍 Got approximate location');
 
             // Animate to new location if map is ready
-            if (mapRef.current && !hasAnimatedToLocation.current) {
-              mapRef.current.animateToRegion(newRegion, 1000);
-              hasAnimatedToLocation.current = true;
-            }
+            // if (mapRef.current && !hasAnimatedToLocation.current) {
+            //   mapRef.current.animateToRegion(newRegion, 1000);
+            //   hasAnimatedToLocation.current = true;
+            // }
 
             // Cache this location
-            await cacheLocation(newRegion);
+            // await cacheLocation(newRegion);
           }
         } catch (approxError) {
           console.warn('Failed to get approximate location:', approxError);
@@ -103,23 +103,23 @@ export default function HomeScreen() {
           });
 
           if (isMounted) {
-            const preciseRegion: Region = {
-              latitude: preciseLocation.coords.latitude,
-              longitude: preciseLocation.coords.longitude,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            };
-            setRegion(preciseRegion);
-            setLocationAccuracy('precise');
-            console.log('📍 Got precise location');
+            // const preciseRegion: Region = {
+            //   latitude: preciseLocation.coords.latitude,
+            //   longitude: preciseLocation.coords.longitude,
+            //   latitudeDelta: 0.0922,
+            //   longitudeDelta: 0.0421,
+            // };
+            // setRegion(preciseRegion);
+            // setLocationAccuracy('precise');
+            // console.log('📍 Got precise location');
 
-            // Smoothly animate to precise location
-            if (mapRef.current) {
-              mapRef.current.animateToRegion(preciseRegion, 1000);
-            }
+            // // Smoothly animate to precise location
+            // if (mapRef.current) {
+            //   mapRef.current.animateToRegion(preciseRegion, 1000);
+            // }
 
             // Update cache with precise location
-            await cacheLocation(preciseRegion);
+            // await cacheLocation(preciseRegion);
           }
         } catch (preciseError) {
           console.warn('Failed to get precise location:', preciseError);
@@ -218,6 +218,7 @@ export default function HomeScreen() {
       {renderLocationIndicator()}
 
       {/* Map renders immediately with default/cached region */}
+      {/*
       <MapView
         ref={mapRef}
         style={styles.map}
@@ -228,6 +229,7 @@ export default function HomeScreen() {
         loadingIndicatorColor={Colors.primary}
         loadingBackgroundColor="#f5f5f5"
       />
+      */}
       <Button label="Submit New Report" onPress={handleOpenModal} primary />
 
       {/* Report Form Modal */}
