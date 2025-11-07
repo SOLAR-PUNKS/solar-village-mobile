@@ -2,7 +2,7 @@
   "expo": {
     "name": "solar-village",
     "slug": "solar-village",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -35,7 +35,12 @@
         "WRITE_EXTERNAL_STORAGE",
         "READ_MEDIA_IMAGES"
       ],
-      "package": "com.kibble.solarvillage"
+      "package": "com.kibble.solarvillage",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyB2ifhrE6p9PM6LkAp-mk1KEO5Si0HyIUM"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
