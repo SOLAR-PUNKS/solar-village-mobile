@@ -111,7 +111,7 @@ export default function App() {
           name="Home"
           component={HomeScreen}
           options={{
-            tabBarLabel: 'Home',
+            tabBarLabel: 'Map',
           }}
         />
         <Tab.Screen name="Settings" component={SettingsScreen} />
