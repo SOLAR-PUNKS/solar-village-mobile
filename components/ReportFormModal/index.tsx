@@ -27,6 +27,7 @@ import {
   ImagePicker,
   pickImageFromGallery,
   ReportTypeSelector,
+  Required,
   takePhoto
 } from '..';
 
@@ -152,7 +153,7 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
               {/* Title Field */}
               <View style={styles.fieldContainer}>
                 <Text style={styles.label}>
-                  Title <Text style={styles.required}>*</Text>
+                  Title <Required />
                 </Text>
                 <TextInput
                   style={[styles.input, errors.title && styles.inputError]}
@@ -171,7 +172,7 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
               {/* Description Field */}
               <View style={styles.fieldContainer}>
                 <Text style={styles.label}>
-                  Description <Text style={styles.required}>*</Text>
+                  Description <Required />
                 </Text>
                 <TextInput
                   style={[styles.textArea, errors.description && styles.inputError]}
@@ -193,7 +194,7 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
               {/* Category Field */}
               <View style={styles.fieldContainer}>
                 <Text style={styles.label}>
-                  Category <Text style={styles.required}>*</Text>
+                  Category <Required />
                 </Text>
                 <TouchableOpacity
                   style={[styles.categoryPicker, errors.category && styles.inputError]}
@@ -327,9 +328,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#333',
     marginBottom: 8,
-  },
-  required: {
-    color: Colors.error,
   },
   input: {
     borderWidth: 1,
