@@ -5,5 +5,7 @@ export {
   takePhoto
 } from './ImagePicker';
 export { default as ReportFormModal } from './ReportFormModal';
+export { default as ReportTypeSelector } from './ReportTypeSelector';
+export { default as Required } from './Required';
 export { default as SettingsToggle } from './SettingsToggle';
 export { default as Toast } from './Toast';

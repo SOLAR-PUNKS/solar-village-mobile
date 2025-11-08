@@ -3,12 +3,14 @@
  */
 
 export type ReportCategory = 'Food' | 'Personal Hygiene' | 'Clothing' | 'School Supplies';
+export type ReportType = 'Offer' | 'Request';
 
 export interface ReportFormData {
   title: string;
   description: string;
   category: ReportCategory | null;
   imageUri: string | null;
+  type: ReportType;
 }
 
 export interface ReportFormErrors {

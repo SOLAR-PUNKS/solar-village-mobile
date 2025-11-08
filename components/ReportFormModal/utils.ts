@@ -1,4 +1,4 @@
-import { ReportFormModalProps, ReportFormData, ReportFormErrors, ReportCategory } from '../../types/report';
+import { ReportFormErrors, ReportCategory } from '../../types/report';
 
 export const CATEGORIES: ReportCategory[] = ['Food', 'Personal Hygiene', 'Clothing', 'School Supplies'];
 
@@ -25,7 +25,6 @@ export const validateForm = ({title, description, imageUri, category}: any): Rep
   }
 
   return newErrors;
-
-  // setErrors(newErrors);
-  // return Object.keys(newErrors).length === 0;
 };
+
+export const REPORT_TYPES = ['Offer', 'Request'];

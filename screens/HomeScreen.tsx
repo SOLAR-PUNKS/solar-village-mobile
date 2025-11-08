@@ -149,6 +149,7 @@ export default function HomeScreen() {
 
   const handleSubmitReport = (data: ReportFormData) => {
     console.log('Report Submitted:');
+    console.log('Type:', data.type);
     console.log('Title:', data.title);
     console.log('Description:', data.description);
     console.log('Category:', data.category);

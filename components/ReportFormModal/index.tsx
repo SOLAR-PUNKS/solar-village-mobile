@@ -17,7 +17,8 @@ import {
   ReportFormModalProps,
   ReportFormData,
   ReportFormErrors,
-  ReportCategory
+  ReportCategory,
+  ReportType
 } from '../../types/report';
 import { Button } from '../index';
 import { Colors } from '../../theme';
@@ -25,6 +26,7 @@ import { CATEGORIES, validateForm } from './utils';
 import {
   ImagePicker,
   pickImageFromGallery,
+  ReportTypeSelector,
   takePhoto
 } from '..';
 
@@ -35,6 +37,7 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [category, setCategory] = useState<ReportCategory | null>(null);
+  const [type, setType] = useState<ReportType>('Offer');
   const [showCategoryPicker, setShowCategoryPicker] = useState<boolean>(false);
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [errors, setErrors] = useState<ReportFormErrors>({});
@@ -49,6 +52,7 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
         description: description.trim(),
         category,
         imageUri,
+        type,
       };
       console.log('Report submitted:', formData);
       onSubmit(formData);
@@ -60,6 +64,7 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
     setTitle('');
     setDescription('');
     setCategory(null);
+    setType('Offer');
     setImageUri(null);
     setErrors({});
   };
@@ -140,6 +145,10 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
               keyboardShouldPersistTaps="handled"
               bounces={true}
             >
+              <ReportTypeSelector
+                onSelectionChange={setType}
+                type={type}
+              />
               {/* Title Field */}
               <View style={styles.fieldContainer}>
                 <Text style={styles.label}>
