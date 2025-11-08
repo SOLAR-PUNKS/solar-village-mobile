@@ -12,6 +12,7 @@ import {
   Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+
 import {
   ReportFormModalProps,
   ReportFormData,
@@ -21,7 +22,11 @@ import {
 import { Button } from '../index';
 import { Colors } from '../../theme';
 import { CATEGORIES, validateForm } from './utils';
-import ImagePicker, { pickImageFromGallery, takePhoto } from '../ImagePicker';
+import {
+  ImagePicker,
+  pickImageFromGallery,
+  takePhoto
+} from '..';
 
 const TITLE_MAX_LENGTH = 100;
 const DESCRIPTION_MAX_LENGTH = 500;
