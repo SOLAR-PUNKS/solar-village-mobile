@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
-import { StyleSheet, Text, View, Animated } from 'react-native';
+import { StyleSheet, Text, Animated } from 'react-native';
 import { ToastType } from '../types/report';
+import { Colors } from '../theme';
 
 interface ToastProps {
   visible: boolean;
@@ -42,11 +43,11 @@ export default function Toast({ visible, message, type, onHide, duration = 3000 
   const getBackgroundColor = () => {
     switch (type) {
       case 'success':
-        return '#4caf50';
+        return Colors.success;
       case 'error':
-        return '#f44336';
+        return Colors.error;
       case 'info':
-        return '#2196f3';
+        return Colors.info;
       default:
         return '#333';
     }

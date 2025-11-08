@@ -2,30 +2,25 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Dimensions, ActivityIndicator, Text } from 'react-native';
 import MapView, { Region } from 'react-native-maps';
 import * as Location from 'expo-location';
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Button, ReportFormModal, Toast } from '../components';
 import { ReportFormData, ToastMessage } from '../types/report';
 import { cacheLocation, getCachedLocation } from '../utils/locationCache';
 import { Colors } from '../theme';
+import Map, { DEFAULT_REGION } from '../components/Map';
+
+import type { LocationAccuracy } from '../components/Map';
 
 const { width } = Dimensions.get('window');
 
 // Calculate square size based on screen width with padding
 const mapSize = Math.min(width * 0.85, 400);
 
-// Default region (San Francisco) - used as fallback
-const DEFAULT_REGION: Region = {
-  latitude: 37.7749,
-  longitude: -122.4194,
-  latitudeDelta: 0.0922,
-  longitudeDelta: 0.0421,
-};
-
 export default function HomeScreen() {
   // Start with default region for immediate render
   const [region, setRegion] = useState<Region>(DEFAULT_REGION);
   const [isLoadingLocation, setIsLoadingLocation] = useState<boolean>(true);
-  const [locationAccuracy, setLocationAccuracy] = useState<'cached' | 'approximate' | 'precise' | 'error'>('cached');
+  const [locationAccuracy, setLocationAccuracy] = useState<LocationAccuracy>('cached');
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [toast, setToast] = useState<ToastMessage>({
@@ -217,16 +212,11 @@ export default function HomeScreen() {
       {/* Location accuracy indicator */}
       {renderLocationIndicator()}
 
-      {/* Map renders immediately with default/cached region */}
-      <MapView
+      <Map
+        locationAccuracy={locationAccuracy}
+        mapSize={mapSize}
         ref={mapRef}
-        style={styles.map}
-        initialRegion={region}
-        showsUserLocation={locationAccuracy !== 'error'}
-        showsMyLocationButton={locationAccuracy !== 'error'}
-        loadingEnabled={true}
-        loadingIndicatorColor={Colors.primary}
-        loadingBackgroundColor="#f5f5f5"
+        region={region}
       />
       <Button label="Submit New Report" onPress={handleOpenModal} primary />
 
@@ -279,20 +269,6 @@ const styles = StyleSheet.create({
   },
   indicatorSpinner: {
     marginLeft: 8,
-  },
-  map: {
-    width: mapSize,
-    height: mapSize,
-    borderRadius: 8,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   loadingText: {
     marginTop: 10,
