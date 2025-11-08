@@ -7,18 +7,21 @@ import {
   Modal,
   ScrollView,
   TouchableOpacity,
-  Image,
   KeyboardAvoidingView,
   Platform,
   Alert,
 } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
-import { ReportFormModalProps, ReportFormData, ReportFormErrors, ReportCategory } from '../types/report';
-import { Button } from './index';
-import { Colors } from '../theme';
-
-const CATEGORIES: ReportCategory[] = ['Food', 'Personal Hygiene', 'Clothing', 'School Supplies'];
+import {
+  ReportFormModalProps,
+  ReportFormData,
+  ReportFormErrors,
+  ReportCategory
+} from '../../types/report';
+import { Button } from '../index';
+import { Colors } from '../../theme';
+import { CATEGORIES, validateForm } from './utils';
+import ImagePicker, { pickImageFromGallery, takePhoto } from '../ImagePicker';
 
 const TITLE_MAX_LENGTH = 100;
 const DESCRIPTION_MAX_LENGTH = 500;
@@ -31,31 +34,11 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [errors, setErrors] = useState<ReportFormErrors>({});
 
-  const validateForm = (): boolean => {
-    const newErrors: ReportFormErrors = {};
-
-    if (!title.trim()) {
-      newErrors.title = 'Title is required';
-    } else if (title.length > TITLE_MAX_LENGTH) {
-      newErrors.title = `Title must be ${TITLE_MAX_LENGTH} characters or less`;
-    }
-
-    if (!description.trim()) {
-      newErrors.description = 'Description is required';
-    } else if (description.length > DESCRIPTION_MAX_LENGTH) {
-      newErrors.description = `Description must be ${DESCRIPTION_MAX_LENGTH} characters or less`;
-    }
-
-    if (!category) {
-      newErrors.category = 'Category is required';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const handleSubmit = () => {
-    if (validateForm()) {
+    const errors = validateForm({title, description, category, imageUri});
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+    } else {
       const formData: ReportFormData = {
         title: title.trim(),
         description: description.trim(),
@@ -81,51 +64,21 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
     onClose();
   };
 
-  const requestPermissions = async (): Promise<boolean> => {
-    const cameraPermission = await ImagePicker.requestCameraPermissionsAsync();
-    const mediaLibraryPermission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    if (cameraPermission.status !== 'granted' || mediaLibraryPermission.status !== 'granted') {
-      Alert.alert(
-        'Permissions Required',
-        'Camera and photo library permissions are required to add images.',
-        [{ text: 'OK' }]
-      );
-      return false;
-    }
-    return true;
-  };
-
-  const pickImageFromGallery = async () => {
-    const hasPermission = await requestPermissions();
-    if (!hasPermission) return;
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 0.8,
+  const handlePickImageFromGallery = () => {
+    pickImageFromGallery().then((uri) => {
+      if (uri) {
+        setImageUri(uri);
+      }
     });
+  }
 
-    if (!result.canceled && result.assets[0]) {
-      setImageUri(result.assets[0].uri);
-    }
-  };
-
-  const takePhoto = async () => {
-    const hasPermission = await requestPermissions();
-    if (!hasPermission) return;
-
-    const result = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 0.8,
+  const handleTakePhoto = () => {
+    takePhoto().then((uri) => {
+      if (uri) {
+        setImageUri(uri);
+      }
     });
-
-    if (!result.canceled && result.assets[0]) {
-      setImageUri(result.assets[0].uri);
-    }
-  };
+  }
 
   const showImagePickerOptions = () => {
     Alert.alert(
@@ -134,11 +87,11 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
       [
         {
           text: 'Take Photo',
-          onPress: takePhoto,
+          onPress: handleTakePhoto,
         },
         {
           text: 'Choose from Gallery',
-          onPress: pickImageFromGallery,
+          onPress: handlePickImageFromGallery,
         },
         {
           text: 'Cancel',
@@ -291,26 +244,11 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
                   </View>
                 </TouchableOpacity>
               </Modal>
-
-              {/* Image Upload */}
-              <View style={styles.fieldContainer}>
-                <Text style={styles.label}>Image (Optional)</Text>
-                
-                {imageUri ? (
-                  <View style={styles.imagePreviewContainer}>
-                    <Image source={{ uri: imageUri }} style={styles.imagePreview} />
-                    <TouchableOpacity style={styles.removeImageButton} onPress={removeImage}>
-                      <Ionicons name="close-circle" size={32} color={Colors.error} />
-                    </TouchableOpacity>
-                  </View>
-                ) : (
-                  <TouchableOpacity style={styles.imagePickerButton} onPress={showImagePickerOptions}>
-                    <Ionicons name="camera-outline" size={32} color={Colors.primary} />
-                    <Text style={styles.imagePickerText}>Add Image (Optional)</Text>
-                  </TouchableOpacity>
-                )}
-              </View>
-
+              <ImagePicker
+                imageUri={imageUri}
+                removeImage={removeImage}
+                showImagePickerOptions={showImagePickerOptions}
+              />
               {/* Action Buttons */}
               <View style={styles.buttonContainer}>
                 <View style={styles.submitButtonWrapper}>
@@ -474,39 +412,6 @@ const styles = StyleSheet.create({
   pickerOptionTextSelected: {
     fontWeight: '600',
     color: Colors.primary,
-  },
-  imagePickerButton: {
-    borderWidth: 2,
-    borderColor: Colors.primary,
-    borderStyle: 'dashed',
-    borderRadius: 8,
-    padding: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#f9f9f9',
-  },
-  imagePickerText: {
-    fontSize: 16,
-    color: Colors.primary,
-    fontWeight: '600',
-    marginTop: 8,
-  },
-  imagePreviewContainer: {
-    position: 'relative',
-    borderRadius: 8,
-    overflow: 'hidden',
-  },
-  imagePreview: {
-    width: '100%',
-    height: 200,
-    borderRadius: 8,
-  },
-  removeImageButton: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    backgroundColor: '#fff',
-    borderRadius: 16,
   },
   buttonContainer: {
     flexDirection: 'row',
