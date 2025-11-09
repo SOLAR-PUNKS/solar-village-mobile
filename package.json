@@ -15,8 +15,9 @@
     "@react-native-community/slider": "5.0.1",
     "@react-navigation/bottom-tabs": "^7.7.3",
     "@react-navigation/native": "^7.1.19",
-    "expo": "~54.0.22",
+    "expo": "54.0.23",
     "expo-constants": "~18.0.10",
+    "expo-font": "~14.0.9",
     "expo-image-picker": "~17.0.8",
     "expo-location": "~19.0.7",
     "expo-navigation-bar": "~5.0.9",
@@ -31,8 +32,7 @@
   "private": true,
   "devDependencies": {
     "@types/haversine": "^1.1.8",
-    "@types/react": "^19.2.2",
-    "@types/react-native": "^0.72.8",
+    "@types/react": "~19.1.10",
     "typescript": "^5.9.3"
   }
 }
