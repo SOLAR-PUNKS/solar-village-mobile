@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import MapView, { Marker, Region } from 'react-native-maps';
 import { useRef } from 'react';
+import haversine from 'haversine';
 
 import { Colors } from '../theme';
 
@@ -12,6 +13,20 @@ type Props = {
   ref: any;
   region: Region;
   onMapReady?: (markerRefs: Record<string, any>) => void;
+};
+
+// Calculate distance between two coordinates using haversine library (in kilometers)
+export const calculateDistance = (
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number
+): number => {
+  return haversine(
+    { latitude: lat1, longitude: lon1 },
+    { latitude: lat2, longitude: lon2 },
+    { unit: 'mile' }
+  );
 };
 
 // Default region (San Francisco) - used as fallback

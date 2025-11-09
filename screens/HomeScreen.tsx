@@ -234,7 +234,11 @@ export default function HomeScreen() {
       />
       {/* <Button label="Submit New Report" onPress={handleOpenModal} primary /> */}
 
-      <LocationList mapRef={mapRef} onShowCallout={handleShowMarkerCallout} />
+      <LocationList 
+        mapRef={mapRef} 
+        onShowCallout={handleShowMarkerCallout}
+        currentRegion={region}
+      />
 
       {/* Report Form Modal */}
       <ReportFormModal

@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { Region } from 'react-native-maps';
 import { Colors } from '../theme';
-import { LOCATIONS } from '../components/Map';
+import { LOCATIONS, calculateDistance } from '../components/Map';
 
 const handleLocationPress = (
   latitude: number,
@@ -30,39 +30,72 @@ const handleLocationPress = (
 type Props = {
   mapRef: any;
   onShowCallout: (locationKey: string) => void;
+  currentRegion: Region;
 }
 
-const LocationList = ({mapRef, onShowCallout}: Props) => (
-  <View style={styles.locationsListSection}>
-    <Text style={styles.locationsListTitle}>All Locations</Text>
-    <ScrollView 
-      style={styles.locationsList}
-      showsVerticalScrollIndicator={true}
-      scrollEventThrottle={16}
-    >
-      {LOCATIONS.map((location) => (
-        <TouchableOpacity 
-          key={location.key} 
-          style={styles.locationCard}
-          onPress={() => handleLocationPress(
+const LocationList = ({mapRef, onShowCallout, currentRegion}: Props) => {
+  // Sort locations by distance to current region
+  const sortedLocations = [...LOCATIONS].sort((a, b) => {
+    const distanceA = calculateDistance(
+      currentRegion.latitude,
+      currentRegion.longitude,
+      a.coordinates.latitude,
+      a.coordinates.longitude
+    );
+    const distanceB = calculateDistance(
+      currentRegion.latitude,
+      currentRegion.longitude,
+      b.coordinates.latitude,
+      b.coordinates.longitude
+    );
+    return distanceA - distanceB;
+  });
+
+  return (
+    <View style={styles.locationsListSection}>
+      <Text style={styles.locationsListTitle}>All Locations</Text>
+      <ScrollView 
+        style={styles.locationsList}
+        showsVerticalScrollIndicator={true}
+        scrollEventThrottle={16}
+      >
+        {sortedLocations.map((location) => {
+          const distance = calculateDistance(
+            currentRegion.latitude,
+            currentRegion.longitude,
             location.coordinates.latitude,
-            location.coordinates.longitude,
-            mapRef,
-            location.key,
-            onShowCallout,
-          )}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.locationTitle}>{location.title}</Text>
-          <Text style={styles.locationAddress}>{location.address}</Text>
-          {location.description && (
-            <Text style={styles.locationDescription}>{location.description}</Text>
-          )}
-        </TouchableOpacity>
-      ))}
-    </ScrollView>
-  </View>
-)
+            location.coordinates.longitude
+          );
+          const distanceText = `${distance.toFixed(1)}mi`;
+
+          return (
+            <TouchableOpacity 
+              key={location.key} 
+              style={styles.locationCard}
+              onPress={() => handleLocationPress(
+                location.coordinates.latitude,
+                location.coordinates.longitude,
+                mapRef,
+                location.key,
+                onShowCallout,
+              )}
+              activeOpacity={0.7}
+            >
+              <View style={styles.locationCardHeader}>
+                <Text style={styles.locationTitle}>{location.title}</Text>
+                <Text style={styles.locationDistance}>{distanceText}</Text>
+              </View>
+              <Text style={styles.locationAddress}>{location.address}</Text>
+              {location.description && (
+                <Text style={styles.locationDescription}>{location.description}</Text>
+              )}
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
+    </View>
+  );
+};
 
 export default LocationList;
 
@@ -101,11 +134,23 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 2,
   },
+  locationCardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
   locationTitle: {
     fontSize: 16,
     fontWeight: '700',
     color: Colors.primary,
-    marginBottom: 4,
+    flex: 1,
+  },
+  locationDistance: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: Colors.secondary,
+    marginLeft: 8,
   },
   locationAddress: {
     fontSize: 14,
