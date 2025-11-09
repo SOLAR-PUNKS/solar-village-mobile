@@ -4,6 +4,7 @@ export {
   pickImageFromGallery,
   takePhoto
 } from './ImagePicker';
+export { default as LocationList } from './LocationList';
 export { default as ReportFormModal } from './ReportFormModal';
 export { default as ReportTypeSelector } from './ReportTypeSelector';
 export { default as Required } from './Required';

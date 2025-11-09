@@ -3,7 +3,7 @@ import { StyleSheet, View, Dimensions, ActivityIndicator, Text } from 'react-nat
 import MapView, { Region } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { useEffect, useState, useRef } from 'react';
-import { Button, ReportFormModal, Toast } from '../components';
+import { LocationList, ReportFormModal, Toast } from '../components';
 import { ReportFormData, ToastMessage } from '../types/report';
 import { cacheLocation, getCachedLocation } from '../utils/locationCache';
 import { Colors } from '../theme';
@@ -220,6 +220,8 @@ export default function HomeScreen() {
         region={region}
       />
       {/* <Button label="Submit New Report" onPress={handleOpenModal} primary /> */}
+
+      <LocationList mapRef={mapRef} />
 
       {/* Report Form Modal */}
       <ReportFormModal

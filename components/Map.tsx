@@ -61,7 +61,9 @@ const FOOD = [
     title: `Wake County Mini Pantry`,
     description: '',
   },
-]
+];
+
+export const LOCATIONS = FOOD;
 
 const Map = ({locationAccuracy, mapSize, ref, region}: Props) => {
   // Map renders immediately with default/cached region
