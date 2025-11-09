@@ -38,16 +38,16 @@ export const DEFAULT_REGION: Region = {
 };
 
 const FOOD = [
-  {
-    key: '35.780267339528486, -78.64115920355435',
-    address: '125 Hillsborough St., Raleigh, NC 27603',
-    coordinates: {
-      latitude: 35.78021511592242,
-      longitude: -78.64119139005999
-    },
-    title: 'Wake County Mini Pantry',
-    description: '',
-  },
+  // {
+  //   key: '35.780267339528486, -78.64115920355435',
+  //   address: '125 Hillsborough St., Raleigh, NC 27603',
+  //   coordinates: {
+  //     latitude: 35.78021511592242,
+  //     longitude: -78.64119139005999
+  //   },
+  //   title: 'Wake County Mini Pantry',
+  //   description: '',
+  // },
   {
     key: '35.779982363949365, -78.64105924588402',
     address: '121 W. Morgan St., Raleigh, NC, 27603',
@@ -57,6 +57,28 @@ const FOOD = [
     },
     title: `Shepherd's Table Soup Kitchen`,
     description: '',
+    hours: {
+      monday: {
+        open: '11:00 AM',
+        close: '12:00 PM',
+      },
+      tuesday: {
+        open: '11:00 AM',
+        close: '12:00 PM',
+      },
+      wednesday: {
+        open: '11:00 AM',
+        close: '12:00 PM',
+      },
+      thursday: {
+        open: '11:00 AM',
+        close: '12:00 PM',
+      },
+      friday: {
+        open: '11:00 AM',
+        close: '12:00 PM',
+      },
+    }
   },
   {
     key: '35.778023468882594, -78.63428830355457',
@@ -67,17 +89,71 @@ const FOOD = [
     },
     title: `Raleigh Rescue Mission`,
     description: '',
+    hours: {
+      monday: {
+        open: '12:00 AM',
+        close: '12:00 AM',
+      },
+      tuesday: {
+        open: '12:00 AM',
+        close: '12:00 AM',
+      },
+      wednesday: {
+        open: '12:00 AM',
+        close: '12:00 AM',
+      },
+      thursday: {
+        open: '12:00 AM',
+        close: '12:00 AM',
+      },
+      friday: {
+        open: '12:00 AM',
+        close: '12:00 AM',
+      },
+      saturday: {
+        open: '12:00 AM',
+        close: '12:00 AM',
+      },
+      sunday: {
+        open: '12:00 AM',
+        close: '12:00 AM',
+      },
+    }
   },
+  // {
+  //   key: '35.77970044919447, -78.63695230724738',
+  //   address: '136 E. Morgan St., Raleigh, NC, 27601',
+  //   coordinates: {
+  //     latitude: 35.77970044919447,
+  //     longitude: -78.63695230724738
+  //   },
+  //   title: `Wake County Mini Pantry`,
+  //   description: '',
+  // },
   {
-    key: '35.77970044919447, -78.63695230724738',
-    address: '136 E. Morgan St., Raleigh, NC, 27601',
+    key: '35.77951569339792, -78.61689181704875',
+    address: '13 Heath St, Raleigh, NC 27610',
     coordinates: {
-      latitude: 35.77970044919447,
-      longitude: -78.63695230724738
+      latitude: 35.77951569339792,
+      longitude: -78.61689181704875,
     },
-    title: `Wake County Mini Pantry`,
-    description: '',
-  },
+    title: `Lincoln Park Community Outreach Center`,
+    description: ``,
+    hours: {
+      tuesday: {
+        open: '2:00 PM',
+        close: '4:00 PM',
+      },
+      thursday: {
+        open: '2:00 PM',
+        close: '4:00 PM',
+      },
+      saturday: {
+        open: '2:00 PM',
+        close: '3:00 PM',
+      }
+    }
+  }
 ];
 
 export const LOCATIONS = FOOD;

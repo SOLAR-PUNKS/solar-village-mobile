@@ -2,6 +2,7 @@ import { StyleSheet, View, Text, ScrollView, TouchableOpacity } from 'react-nati
 import { Region } from 'react-native-maps';
 import { Colors } from '../theme';
 import { LOCATIONS, calculateDistance } from '../components/Map';
+import { isLocationOpen } from '../utils/businessHours';
 
 const handleLocationPress = (
   latitude: number,
@@ -67,6 +68,7 @@ const LocationList = ({mapRef, onShowCallout, currentRegion}: Props) => {
             location.coordinates.longitude
           );
           const distanceText = `${distance.toFixed(1)}mi`;
+          const { isOpen, status } = isLocationOpen(location.hours);
 
           return (
             <TouchableOpacity 
@@ -85,7 +87,19 @@ const LocationList = ({mapRef, onShowCallout, currentRegion}: Props) => {
                 <Text style={styles.locationTitle}>{location.title}</Text>
                 <Text style={styles.locationDistance}>{distanceText}</Text>
               </View>
-              <Text style={styles.locationAddress}>{location.address}</Text>
+              <View style={styles.locationCardSubHeader}>
+                <Text style={styles.locationAddress}>{location.address}</Text>
+                {status && (
+                  <Text
+                    style={[
+                      styles.locationStatus,
+                      isOpen ? styles.statusOpen : styles.statusClosed,
+                    ]}
+                  >
+                    {status}
+                  </Text>
+                )}
+              </View>
               {location.description && (
                 <Text style={styles.locationDescription}>{location.description}</Text>
               )}
@@ -152,10 +166,32 @@ const styles = StyleSheet.create({
     color: Colors.secondary,
     marginLeft: 8,
   },
+  locationCardSubHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
   locationAddress: {
     fontSize: 14,
     color: '#333',
-    marginBottom: 4,
+    flex: 1,
+  },
+  locationStatus: {
+    fontSize: 12,
+    fontWeight: '600',
+    marginLeft: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 4,
+  },
+  statusOpen: {
+    backgroundColor: Colors.success,
+    color: '#fff',
+  },
+  statusClosed: {
+    backgroundColor: Colors.error,
+    color: '#fff',
   },
   locationDescription: {
     fontSize: 13,
