@@ -32,6 +32,16 @@ export const isLocationOpen = (
     return { isOpen: false, status: 'Closed' };
   }
 
+  // Handle string values like "closed"
+  if (typeof todayHours === 'string') {
+    const lowerValue = todayHours.toLowerCase();
+    if (lowerValue === 'closed') {
+      return { isOpen: false, status: 'Closed' };
+    }
+    // For other string values, assume closed
+    return { isOpen: false, status: 'Closed' };
+  }
+
   const { open, close } = todayHours;
 
   // Check if open 24 hours (open time equals close time)
