@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Dimensions, ActivityIndicator, Text } from 'react-native';
+import { StyleSheet, View, ActivityIndicator, Text } from 'react-native';
 import MapView, { Region } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { useEffect, useState, useRef } from 'react';
@@ -8,13 +8,9 @@ import { ReportFormData, ToastMessage } from '../types/report';
 import { cacheLocation, getCachedLocation } from '../utils/locationCache';
 import { Colors } from '../theme';
 import Map, { DEFAULT_REGION } from '../components/Map';
+import { fetchCommunityResources, TransformedLocation } from '../utils/api';
 
 import type { LocationAccuracy } from '../components/Map';
-
-const { width } = Dimensions.get('window');
-
-// Calculate square size based on screen width with padding
-const mapSize = Math.min(width * 0.85, 400);
 
 export default function HomeScreen() {
   // Start with default region for immediate render
@@ -28,10 +24,14 @@ export default function HomeScreen() {
     message: '',
     visible: false,
   });
+  const [locations, setLocations] = useState<TransformedLocation[]>([]);
+  const [isLoadingLocations, setIsLoadingLocations] = useState<boolean>(true);
+  const [locationsError, setLocationsError] = useState<string | null>(null);
 
   const mapRef = useRef<MapView>(null);
   const hasAnimatedToLocation = useRef<boolean>(false);
   const markerRefs = useRef<Record<string, any>>({});
+  const collapseLocationListRef = useRef<(() => void) | null>(null);
 
   /**
    * Optimized location loading with 3-stage approach:
@@ -140,9 +140,39 @@ export default function HomeScreen() {
     };
   }, []);
 
-  const handleOpenModal = () => {
-    setModalVisible(true);
-  };
+  // Fetch community resources from API
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadLocations = async () => {
+      try {
+        setIsLoadingLocations(true);
+        setLocationsError(null);
+        const fetchedLocations = await fetchCommunityResources();
+        if (isMounted) {
+          setLocations(fetchedLocations);
+          console.log(`📍 Loaded ${fetchedLocations.length} locations from API`);
+        }
+      } catch (error) {
+        console.error('Error loading locations:', error);
+        if (isMounted) {
+          setLocationsError('Failed to load locations');
+          // Keep empty array on error - app will still work without locations
+          setLocations([]);
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoadingLocations(false);
+        }
+      }
+    };
+
+    loadLocations();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const handleCloseModal = () => {
     setModalVisible(false);
@@ -220,17 +250,21 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.headerText}>Solar Village</Text>
-
       {/* Location accuracy indicator */}
       {renderLocationIndicator()}
 
       <Map
         locationAccuracy={locationAccuracy}
-        mapSize={mapSize}
         ref={mapRef}
         region={region}
         onMapReady={handleMapReady}
+        locations={locations}
+        isLoadingLocations={isLoadingLocations}
+        onPress={() => {
+          if (collapseLocationListRef.current) {
+            collapseLocationListRef.current();
+          }
+        }}
       />
       {/* <Button label="Submit New Report" onPress={handleOpenModal} primary /> */}
 
@@ -238,6 +272,10 @@ export default function HomeScreen() {
         mapRef={mapRef} 
         onShowCallout={handleShowMarkerCallout}
         currentRegion={region}
+        locations={locations}
+        isLoadingLocations={isLoadingLocations}
+        error={locationsError}
+        collapsedRef={collapseLocationListRef}
       />
 
       {/* Report Form Modal */}
@@ -264,22 +302,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  headerText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: Colors.primary,
-    marginBottom: 10,
-    textAlign: 'center',
-    paddingHorizontal: 20,
   },
   locationIndicator: {
+    position: 'absolute',
+    top: 50,
+    left: 0,
+    right: 0,
+    zIndex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 10,
     paddingHorizontal: 20,
     minHeight: 24,
   },
