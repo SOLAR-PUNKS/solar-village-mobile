@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import MapView, { Marker, Region } from 'react-native-maps';
+import { useRef } from 'react';
 
 import { Colors } from '../theme';
 
@@ -10,6 +11,7 @@ type Props = {
   mapSize: number;
   ref: any;
   region: Region;
+  onMapReady?: (markerRefs: Record<string, any>) => void;
 };
 
 // Default region (San Francisco) - used as fallback
@@ -65,7 +67,15 @@ const FOOD = [
 
 export const LOCATIONS = FOOD;
 
-const Map = ({locationAccuracy, mapSize, ref, region}: Props) => {
+const Map = ({locationAccuracy, mapSize, ref, region, onMapReady}: Props) => {
+  const markerRefs = useRef<Record<string, any>>({});
+
+  const handleMapReady = () => {
+    if (onMapReady) {
+      onMapReady(markerRefs.current);
+    }
+  };
+
   // Map renders immediately with default/cached region
   return <MapView
     ref={ref}
@@ -76,6 +86,7 @@ const Map = ({locationAccuracy, mapSize, ref, region}: Props) => {
     loadingEnabled={true}
     loadingIndicatorColor={Colors.primary}
     loadingBackgroundColor="#f5f5f5"
+    onMapReady={handleMapReady}
   >
     {/* TODO: Remove when we actually implement the BE */}
     {/* <Marker
@@ -86,6 +97,11 @@ const Map = ({locationAccuracy, mapSize, ref, region}: Props) => {
     /> */}
     {FOOD.map((location) => (
       <Marker
+        ref={(marker) => {
+          if (marker) {
+            markerRefs.current[location.key] = marker;
+          }
+        }}
         key={location.key}
         coordinate={{
           latitude: location.coordinates.latitude,

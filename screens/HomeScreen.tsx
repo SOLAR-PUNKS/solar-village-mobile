@@ -31,6 +31,7 @@ export default function HomeScreen() {
 
   const mapRef = useRef<MapView>(null);
   const hasAnimatedToLocation = useRef<boolean>(false);
+  const markerRefs = useRef<Record<string, any>>({});
 
   /**
    * Optimized location loading with 3-stage approach:
@@ -170,6 +171,17 @@ export default function HomeScreen() {
     setToast({ ...toast, visible: false });
   };
 
+  const handleMapReady = (refs: Record<string, any>) => {
+    markerRefs.current = refs;
+  };
+
+  const handleShowMarkerCallout = (locationKey: string) => {
+    const marker = markerRefs.current[locationKey];
+    if (marker) {
+      marker.showCallout();
+    }
+  };
+
   // Render location accuracy indicator
   const renderLocationIndicator = () => {
     if (!isLoadingLocation && locationAccuracy !== 'error') return null;
@@ -218,10 +230,11 @@ export default function HomeScreen() {
         mapSize={mapSize}
         ref={mapRef}
         region={region}
+        onMapReady={handleMapReady}
       />
       {/* <Button label="Submit New Report" onPress={handleOpenModal} primary /> */}
 
-      <LocationList mapRef={mapRef} />
+      <LocationList mapRef={mapRef} onShowCallout={handleShowMarkerCallout} />
 
       {/* Report Form Modal */}
       <ReportFormModal

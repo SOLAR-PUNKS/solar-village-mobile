@@ -7,6 +7,8 @@ const handleLocationPress = (
   latitude: number,
   longitude: number,
   mapRef: any,
+  locationKey: string,
+  onShowCallout: (key: string) => void,
 ) => {
   if (!mapRef.current) return;
 
@@ -18,13 +20,19 @@ const handleLocationPress = (
   };
 
   mapRef.current.animateToRegion(zoomedRegion, 500);
+  
+  // Show the callout after a slight delay to ensure the map animation is complete
+  setTimeout(() => {
+    onShowCallout(locationKey);
+  }, 500);
 };
 
 type Props = {
   mapRef: any;
+  onShowCallout: (locationKey: string) => void;
 }
 
-const LocationList = ({mapRef}: Props) => (
+const LocationList = ({mapRef, onShowCallout}: Props) => (
   <View style={styles.locationsListSection}>
     <Text style={styles.locationsListTitle}>All Locations</Text>
     <ScrollView 
@@ -40,6 +48,8 @@ const LocationList = ({mapRef}: Props) => (
             location.coordinates.latitude,
             location.coordinates.longitude,
             mapRef,
+            location.key,
+            onShowCallout,
           )}
           activeOpacity={0.7}
         >
