@@ -48,7 +48,7 @@ export default function SettingsScreen() {
           </View>
         </View>
 
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <Text style={styles.sectionLabel}>Show Me</Text>
           <SettingsToggle
             label="Food"
@@ -70,7 +70,7 @@ export default function SettingsScreen() {
             value={showSchoolSupplies}
             onChange={setShowSchoolSupplies}
           />
-        </View>
+        </View> */}
         <Button label="Apply" onPress={handleApply} primary />
       </View>
     </ScrollView>

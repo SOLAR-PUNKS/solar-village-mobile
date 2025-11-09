@@ -69,8 +69,8 @@ export default function App() {
             let iconSize = size;
 
             if (route.name === 'Home') {
-              iconName = focused ? 'home' : 'home-outline';
-              iconSize = 40; // Larger size for Home icon
+              iconName = focused ? 'map' : 'map-outline';
+              // iconSize = 40; // Larger size for Home icon
             } else if (route.name === 'Settings') {
               iconName = focused ? 'settings' : 'settings-outline';
             } else if (route.name === 'Chat') {
@@ -106,7 +106,7 @@ export default function App() {
           },
         })}
       >
-        <Tab.Screen name="Chat" component={ChatScreen} />
+        {/* <Tab.Screen name="Chat" component={ChatScreen} /> */}
         <Tab.Screen
           name="Home"
           component={HomeScreen}
