@@ -219,7 +219,7 @@ export default function HomeScreen() {
         ref={mapRef}
         region={region}
       />
-      <Button label="Submit New Report" onPress={handleOpenModal} primary />
+      {/* <Button label="Submit New Report" onPress={handleOpenModal} primary /> */}
 
       {/* Report Form Modal */}
       <ReportFormModal

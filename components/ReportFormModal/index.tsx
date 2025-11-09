@@ -228,12 +228,9 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
                       </TouchableOpacity>
                     </View>
                     {CATEGORIES.map((cat) => (
-                      <TouchableOpacity
-                        key={cat}
-                        style={[
-                          styles.pickerOption,
-                          category === cat && styles.pickerOptionSelected,
-                        ]}
+                      <CategoryPickerItem
+                        category={cat}
+                        selectedCategory={category}
                         onPress={() => {
                           setCategory(cat);
                           setShowCategoryPicker(false);
@@ -242,19 +239,7 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
                             setErrors({ ...errors, category: undefined });
                           }
                         }}
-                      >
-                        <Text
-                          style={[
-                            styles.pickerOptionText,
-                            category === cat && styles.pickerOptionTextSelected,
-                          ]}
-                        >
-                          {cat}
-                        </Text>
-                        {category === cat && (
-                          <Ionicons name="checkmark" size={24} color={Colors.primary} />
-                        )}
-                      </TouchableOpacity>
+                      />
                     ))}
                   </View>
                 </TouchableOpacity>
@@ -280,6 +265,37 @@ export default function ReportFormModal({ visible, onClose, onSubmit }: ReportFo
     </Modal>
   );
 }
+
+const CategoryPickerItem = ({
+  category,
+  selectedCategory,
+  onPress,
+}: {
+  category: ReportCategory;
+  selectedCategory: ReportCategory | null;
+  onPress: () => void;
+}) => (
+  <TouchableOpacity
+    key={category}
+    style={[
+      styles.pickerOption,
+      selectedCategory === category && styles.pickerOptionSelected,
+    ]}
+    onPress={onPress}
+  >
+    <Text
+      style={[
+        styles.pickerOptionText,
+        selectedCategory === category && styles.pickerOptionTextSelected,
+      ]}
+    >
+      {category}
+    </Text>
+    {selectedCategory === category && (
+      <Ionicons name="checkmark" size={24} color={Colors.primary} />
+    )}
+  </TouchableOpacity>
+)
 
 const styles = StyleSheet.create({
   modalContainer: {
