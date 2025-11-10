@@ -2,7 +2,7 @@
   "expo": {
     "name": "solar-village",
     "slug": "solar-village",
-    "version": "0.0.9",
+    "version": "0.0.10",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -15,10 +15,7 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "This app uses your location to show you on the map.",
-        "NSCameraUsageDescription": "This app uses your camera to take photos for reports.",
-        "NSPhotoLibraryUsageDescription": "This app accesses your photo library to select images for reports.",
-        "NSPhotoLibraryAddUsageDescription": "This app saves photos to your photo library."
+        "NSLocationWhenInUseUsageDescription": "This app uses your location to show you on the map."
       }
     },
     "android": {
@@ -28,12 +25,7 @@
       },
       "edgeToEdgeEnabled": true,
       "permissions": [
-        "ACCESS_FINE_LOCATION",
-        "ACCESS_COARSE_LOCATION",
-        "CAMERA",
-        "READ_EXTERNAL_STORAGE",
-        "WRITE_EXTERNAL_STORAGE",
-        "READ_MEDIA_IMAGES"
+        "ACCESS_COARSE_LOCATION"
       ],
       "package": "com.kibble.solarvillage",
       "config": {

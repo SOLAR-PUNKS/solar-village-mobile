@@ -109,34 +109,34 @@ export default function HomeScreen() {
         }
 
         // STAGE 3: Get precise location in background (5-15 seconds)
-        try {
-          const preciseLocation = await Location.getCurrentPositionAsync({
-            accuracy: Location.Accuracy.High, // Most accurate, uses GPS
-          });
+        // try {
+        //   const preciseLocation = await Location.getCurrentPositionAsync({
+        //     accuracy: Location.Accuracy.High, // Most accurate, uses GPS
+        //   });
 
-          if (isMounted) {
-            const preciseRegion: Region = {
-              latitude: preciseLocation.coords.latitude,
-              longitude: preciseLocation.coords.longitude,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
-            };
-            setRegion(preciseRegion);
-            setLocationAccuracy('precise');
-            console.log('📍 Got precise location');
+        //   if (isMounted) {
+        //     const preciseRegion: Region = {
+        //       latitude: preciseLocation.coords.latitude,
+        //       longitude: preciseLocation.coords.longitude,
+        //       latitudeDelta: 0.0922,
+        //       longitudeDelta: 0.0421,
+        //     };
+        //     setRegion(preciseRegion);
+        //     setLocationAccuracy('precise');
+        //     console.log('📍 Got precise location');
 
-            // Smoothly animate to precise location
-            if (mapRef.current) {
-              mapRef.current.animateToRegion(preciseRegion, 1000);
-            }
+        //     // Smoothly animate to precise location
+        //     if (mapRef.current) {
+        //       mapRef.current.animateToRegion(preciseRegion, 1000);
+        //     }
 
-            // Update cache with precise location
-            await cacheLocation(preciseRegion);
-          }
-        } catch (preciseError) {
-          console.warn('Failed to get precise location:', preciseError);
-          // Not critical - we already have approximate location
-        }
+        //     // Update cache with precise location
+        //     await cacheLocation(preciseRegion);
+        //   }
+        // } catch (preciseError) {
+        //   console.warn('Failed to get precise location:', preciseError);
+        //   // Not critical - we already have approximate location
+        // }
 
         setIsLoadingLocation(false);
       } catch (error) {
