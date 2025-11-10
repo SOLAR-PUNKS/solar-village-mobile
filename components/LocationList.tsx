@@ -2,11 +2,10 @@ import { StyleSheet, View, Text, ScrollView, TouchableOpacity, ActivityIndicator
 import { Region } from 'react-native-maps';
 import { Colors } from '../theme';
 import { calculateDistance } from '../components/Map';
-import { isLocationOpen } from '../utils/businessHours';
+import { isLocationOpen, formatNextOpenTime } from '../utils/businessHours';
 import { TransformedLocation } from '../utils/api';
 import { useState, useRef, useEffect } from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react';
 
 const handleLocationPress = (
   latitude: number,
@@ -56,113 +55,6 @@ type Props = {
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 const COLLAPSED_HEIGHT = 80; // Height when collapsed (just header)
 const EXPANDED_HEIGHT = SCREEN_HEIGHT * 0.6; // 60% of screen height when expanded
-
-// Helper function to convert time string (e.g., "11:00 AM") to minutes since midnight
-const parseTime = (timeStr: string): number => {
-  const [time, period] = timeStr.split(' ');
-  let [hours, minutes] = time.split(':').map(Number);
-
-  if (period === 'PM' && hours !== 12) {
-    hours += 12;
-  } else if (period === 'AM' && hours === 12) {
-    hours = 0;
-  }
-
-  return hours * 60 + minutes;
-};
-
-// Format when the location will be open next
-const formatNextOpenTime = (hours?: Record<string, { open: string; close: string } | string>): string => {
-  if (!hours) return 'Hours not available';
-  
-  const now = new Date();
-  const currentTime = now.getHours() * 60 + now.getMinutes();
-  const dayName = now.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
-  
-  const dayNames = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-  const dayDisplayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-  
-  // Check if currently open
-  const todayHours = hours[dayName];
-  if (todayHours && typeof todayHours === 'object' && 'open' in todayHours && 'close' in todayHours && todayHours.open && todayHours.close) {
-    const openTime = parseTime(todayHours.open);
-    const closeTime = parseTime(todayHours.close);
-    
-    // Check if open 24 hours
-    if (openTime === closeTime) {
-      return 'Open 24 hours';
-    }
-    
-    // Check if currently open
-    let isOpen = false;
-    if (closeTime <= openTime) {
-      // Overnight hours
-      isOpen = currentTime >= openTime || currentTime < closeTime;
-    } else {
-      isOpen = currentTime >= openTime && currentTime < closeTime;
-    }
-    
-    if (isOpen) {
-      // Format close time (times are already in 12-hour format from API)
-      const closeTimeStr = todayHours.close;
-      const [time, period] = closeTimeStr.split(' ');
-      const displayTime = `${time} ${period.toLowerCase()}`;
-      return `Open until ${displayTime}`;
-    }
-    
-    // If closed today but opens later today
-    if (currentTime < openTime) {
-      // Format open time (times are already in 12-hour format from API)
-      const [time, period] = todayHours.open.split(' ');
-      const displayTime = `${time} ${period.toLowerCase()}`;
-      return `Opens today at ${displayTime}`;
-    }
-  }
-  
-  // Find next open day
-  const todayIndex = dayNames.indexOf(dayName);
-  if (todayIndex === -1) return 'Hours not available';
-  
-  // Check next 7 days (including today if we haven't checked it yet)
-  for (let i = 0; i < 7; i++) {
-    const checkIndex = (todayIndex + i) % 7;
-    const checkDay = dayNames[checkIndex];
-    const checkDayHours = hours[checkDay];
-    
-    if (!checkDayHours) continue;
-    
-    // Handle string values like "closed"
-    if (typeof checkDayHours === 'string') {
-      const lowerValue = checkDayHours.toLowerCase();
-      if (lowerValue === 'closed') continue;
-    }
-    
-    if (typeof checkDayHours === 'object' && checkDayHours.open && checkDayHours.close) {
-      const openTime = parseTime(checkDayHours.open);
-      
-      // If checking today and we're past open time, skip
-      if (i === 0 && currentTime >= openTime) continue;
-      
-      // Format the day name
-      let dayLabel = '';
-      if (i === 0) {
-        dayLabel = 'today';
-      } else if (i === 1) {
-        dayLabel = 'tomorrow';
-      } else {
-        dayLabel = `next ${dayDisplayNames[checkIndex]}`;
-      }
-      
-      // Format the time (times are already in 12-hour format from API)
-      const [time, period] = checkDayHours.open.split(' ');
-      const displayTime = `${time} ${period.toLowerCase()}`;
-      
-      return `Opens ${dayLabel} at ${displayTime}`;
-    }
-  }
-  
-  return 'Hours not available';
-};
 
 const LocationList = ({mapRef, onShowCallout, currentRegion, locations, isLoadingLocations, error, collapsedRef}: Props) => {
   const [isExpanded, setIsExpanded] = useState(false);
