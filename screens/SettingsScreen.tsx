@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
-import { useState } from 'react';
-import Slider from '@react-native-community/slider';
+// import { useState } from 'react';
+// import Slider from '@react-native-community/slider';
 import { Button, SettingsToggle } from '../components';
 import { Colors } from '../theme';
 import { useAppContext } from '../utils/AppContext';
@@ -9,7 +9,7 @@ export default function SettingsScreen() {
   const { showOpenLocationsOnly, setShowOpenLocationsOnly } = useAppContext();
   
   // State management
-  const [distance, setDistance] = useState<number>(30);
+  // const [distance, setDistance] = useState<number>(30);
   // const [showFood, setShowFood] = useState<boolean>(false);
   // const [showHygiene, setShowHygiene] = useState<boolean>(false);
   // const [showClothing, setShowClothing] = useState<boolean>(false);
@@ -17,7 +17,7 @@ export default function SettingsScreen() {
 
   const handleApply = () => {
     console.log('Settings Applied:');
-    console.log('Distance:', distance, 'miles');
+    // console.log('Distance:', distance, 'miles');
     console.log('Show Open Locations Only:', showOpenLocationsOnly);
     // console.log('Show Food:', showFood);
     // console.log('Show Hygiene:', showHygiene);
@@ -31,7 +31,7 @@ export default function SettingsScreen() {
         <Text style={styles.title}>Settings</Text>
         <Text style={styles.subtitle}>Configure your app preferences</Text>
 
-        <View style={styles.section}>
+        {/* <View style={styles.section}>
           <View style={styles.sliderHeader}>
             <Text style={styles.sectionLabel}>Distance</Text>
             <Text style={styles.valueText}>{Math.round(distance)} miles</Text>
@@ -50,7 +50,7 @@ export default function SettingsScreen() {
             <Text style={styles.sliderLabelText}>0</Text>
             <Text style={styles.sliderLabelText}>100</Text>
           </View>
-        </View>
+        </View> */}
 
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>Location Filters</Text>
