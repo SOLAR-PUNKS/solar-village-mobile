@@ -3,22 +3,26 @@ import { useState } from 'react';
 import Slider from '@react-native-community/slider';
 import { Button, SettingsToggle } from '../components';
 import { Colors } from '../theme';
+import { useAppContext } from '../utils/AppContext';
 
 export default function SettingsScreen() {
+  const { showOpenLocationsOnly, setShowOpenLocationsOnly } = useAppContext();
+  
   // State management
   const [distance, setDistance] = useState<number>(30);
-  const [showFood, setShowFood] = useState<boolean>(false);
-  const [showHygiene, setShowHygiene] = useState<boolean>(false);
-  const [showClothing, setShowClothing] = useState<boolean>(false);
-  const [showSchoolSupplies, setShowSchoolSupplies] = useState<boolean>(false);
+  // const [showFood, setShowFood] = useState<boolean>(false);
+  // const [showHygiene, setShowHygiene] = useState<boolean>(false);
+  // const [showClothing, setShowClothing] = useState<boolean>(false);
+  // const [showSchoolSupplies, setShowSchoolSupplies] = useState<boolean>(false);
 
   const handleApply = () => {
     console.log('Settings Applied:');
     console.log('Distance:', distance, 'miles');
-    console.log('Show Food:', showFood);
-    console.log('Show Hygiene:', showHygiene);
-    console.log('Show Clothing:', showClothing);
-    console.log('Show School Supplies:', showSchoolSupplies);
+    console.log('Show Open Locations Only:', showOpenLocationsOnly);
+    // console.log('Show Food:', showFood);
+    // console.log('Show Hygiene:', showHygiene);
+    // console.log('Show Clothing:', showClothing);
+    // console.log('Show School Supplies:', showSchoolSupplies);
   };
 
   return (
@@ -48,6 +52,18 @@ export default function SettingsScreen() {
           </View>
         </View>
 
+        <View style={styles.section}>
+          <Text style={styles.sectionLabel}>Location Filters</Text>
+          <Text style={styles.sectionDescription}>
+            Control which locations are displayed on the map and in the list
+          </Text>
+          <SettingsToggle
+            label="Show only open locations"
+            value={showOpenLocationsOnly}
+            onChange={setShowOpenLocationsOnly}
+          />
+        </View>
+
         {/* <View style={styles.section}>
           <Text style={styles.sectionLabel}>Show Me</Text>
           <SettingsToggle
@@ -71,7 +87,7 @@ export default function SettingsScreen() {
             onChange={setShowSchoolSupplies}
           />
         </View> */}
-        <Button label="Apply" onPress={handleApply} primary />
+        {/* <Button label="Apply" onPress={handleApply} primary /> */}
       </View>
     </ScrollView>
   );
@@ -122,6 +138,12 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: Colors.primary,
     marginBottom: 15,
+  },
+  sectionDescription: {
+    fontSize: 14,
+    color: Colors.text.secondary,
+    marginBottom: 15,
+    lineHeight: 20,
   },
   sliderHeader: {
     flexDirection: 'row',

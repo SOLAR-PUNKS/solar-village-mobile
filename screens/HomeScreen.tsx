@@ -2,17 +2,21 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, ActivityIndicator, Text } from 'react-native';
 import MapView, { Region } from 'react-native-maps';
 import * as Location from 'expo-location';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { LocationList, ReportFormModal, Toast } from '../components';
 import { ReportFormData, ToastMessage } from '../types/report';
 import { cacheLocation, getCachedLocation } from '../utils/locationCache';
 import { Colors } from '../theme';
 import Map, { DEFAULT_REGION } from '../components/Map';
 import { fetchCommunityResources, TransformedLocation } from '../utils/api';
+import { useAppContext } from '../utils/AppContext';
+import { isLocationOpen } from '../utils/businessHours';
 
 import type { LocationAccuracy } from '../components/Map';
 
 export default function HomeScreen() {
+  const { showOpenLocationsOnly } = useAppContext();
+  
   // Start with default region for immediate render
   const [region, setRegion] = useState<Region>(DEFAULT_REGION);
   const [isLoadingLocation, setIsLoadingLocation] = useState<boolean>(true);
@@ -32,6 +36,18 @@ export default function HomeScreen() {
   const hasAnimatedToLocation = useRef<boolean>(false);
   const markerRefs = useRef<Record<string, any>>({});
   const collapseLocationListRef = useRef<(() => void) | null>(null);
+
+  // Filter locations based on settings
+  const filteredLocations = useMemo(() => {
+    if (!showOpenLocationsOnly) {
+      return locations;
+    }
+    
+    return locations.filter(location => {
+      const { isOpen } = isLocationOpen(location.hours);
+      return isOpen;
+    });
+  }, [locations, showOpenLocationsOnly]);
 
   /**
    * Optimized location loading with 3-stage approach:
@@ -258,7 +274,7 @@ export default function HomeScreen() {
         ref={mapRef}
         region={region}
         onMapReady={handleMapReady}
-        locations={locations}
+        locations={filteredLocations}
         isLoadingLocations={isLoadingLocations}
         onPress={() => {
           if (collapseLocationListRef.current) {
@@ -272,7 +288,7 @@ export default function HomeScreen() {
         mapRef={mapRef} 
         onShowCallout={handleShowMarkerCallout}
         currentRegion={region}
-        locations={locations}
+        locations={filteredLocations}
         isLoadingLocations={isLoadingLocations}
         error={locationsError}
         collapsedRef={collapseLocationListRef}

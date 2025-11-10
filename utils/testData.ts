@@ -149,5 +149,128 @@ export const TEST_LOCATIONS: TransformedLocation[] = [
       sunday: { open: '12:00 PM', close: '5:00 PM' },
     },
   },
+  {
+    key: '35.779982363949365, -78.64105924588402',
+    id: 6,
+    title: `Shepherd's Table Soup Kitchen`,
+    description: '',
+    coordinates: {
+      latitude: 35.779982363949365,
+      longitude: -78.64105924588402
+    },
+    address: '121 W. Morgan St., Raleigh, NC, 27603',
+    city: 'Raleigh',
+    state: 'NC',
+    zip_code: '27603',
+    phone: '',
+    email: '',
+    website: 'https://example.com',
+    resource_type: 'foodBank',
+    resource_type_display: 'Food Bank',
+    hours: {
+      monday: {
+        open: '11:00 AM',
+        close: '12:00 PM',
+      },
+      tuesday: {
+        open: '11:00 AM',
+        close: '12:00 PM',
+      },
+      wednesday: {
+        open: '11:00 AM',
+        close: '12:00 PM',
+      },
+      thursday: {
+        open: '11:00 AM',
+        close: '12:00 PM',
+      },
+      friday: {
+        open: '11:00 AM',
+        close: '12:00 PM',
+      },
+    }
+  },
+  {
+    key: '35.778023468882594, -78.63428830355457',
+    id: 7,
+    title: `Raleigh Rescue Mission`,
+    description: '',
+    coordinates: {
+      latitude: 35.778023468882594,
+      longitude: -78.63428830355457
+    },
+    address: '314 E Hargett St Raleigh NC 27601',
+    city: 'Raleigh',
+    state: 'NC',
+    zip_code: '27601',
+    phone: '',
+    email: '',
+    website: 'https://example.com',
+    resource_type: 'foodBank',
+    resource_type_display: 'Food Bank',
+    hours: {
+      monday: {
+        open: '12:00 AM',
+        close: '12:00 AM',
+      },
+      tuesday: {
+        open: '12:00 AM',
+        close: '12:00 AM',
+      },
+      wednesday: {
+        open: '12:00 AM',
+        close: '12:00 AM',
+      },
+      thursday: {
+        open: '12:00 AM',
+        close: '12:00 AM',
+      },
+      friday: {
+        open: '12:00 AM',
+        close: '12:00 AM',
+      },
+      saturday: {
+        open: '12:00 AM',
+        close: '12:00 AM',
+      },
+      sunday: {
+        open: '12:00 AM',
+        close: '12:00 AM',
+      },
+    }
+  },
+  {
+    key: '35.77951569339792, -78.61689181704875',
+    id: 8,
+    title: `Lincoln Park Community Outreach Center`,
+    description: '',
+    coordinates: {
+      latitude: 35.77951569339792,
+      longitude: -78.61689181704875,
+    },
+    address: '13 Heath St, Raleigh, NC 27610',
+    city: 'Raleigh',
+    state: 'NC',
+    zip_code: '27610',
+    phone: '',
+    email: '',
+    website: 'https://example.com',
+    resource_type: 'foodBank',
+    resource_type_display: 'Food Bank',
+    hours: {
+      tuesday: {
+        open: '2:00 PM',
+        close: '4:00 PM',
+      },
+      thursday: {
+        open: '2:00 PM',
+        close: '4:00 PM',
+      },
+      saturday: {
+        open: '2:00 PM',
+        close: '3:00 PM',
+      }
+    }
+  },
 ];
 

@@ -7,7 +7,8 @@ import * as NavigationBar from 'expo-navigation-bar';
 
 import HomeScreen from './screens/HomeScreen';
 import SettingsScreen from './screens/SettingsScreen';
-import ChatScreen from './screens/ChatScreen';
+// import ChatScreen from './screens/ChatScreen';
+import { AppProvider } from './utils/AppContext';
 
 import { Colors } from './theme';
 
@@ -59,8 +60,9 @@ export default function App() {
   }, []);
 
   return (
-    <NavigationContainer>
-      <Tab.Navigator
+    <AppProvider>
+      <NavigationContainer>
+        <Tab.Navigator
         initialRouteName="Home"
         screenOptions={({ route }) => ({
           headerShown: false,
@@ -115,8 +117,9 @@ export default function App() {
           }}
         />
         <Tab.Screen name="Settings" component={SettingsScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
+        </Tab.Navigator>
+      </NavigationContainer>
+    </AppProvider>
   );
 }
 
