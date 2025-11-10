@@ -77,14 +77,9 @@ const Map = ({locationAccuracy, ref, region, onMapReady, locations, isLoadingLoc
           longitude: location.coordinates.longitude,
         }}
         tracksViewChanges={false}
-      >
-        <Callout tooltip style={styles.calloutContainer}>
-          <View style={styles.callout}>
-            <Text style={styles.calloutTitle}>{location.title}</Text>
-            <Text style={styles.calloutDescription}>{location.address}</Text>
-          </View>
-        </Callout>
-      </Marker>
+        title={location.title}
+        description={location.address}
+      />
     ))}
     
   </MapView>
