@@ -285,6 +285,8 @@ export default function HomeScreen() {
         onMapReady={handleMapReady}
         locations={filteredLocations}
         isLoadingLocations={isLoadingLocations}
+        useSimpleCallouts={false} // iOS will use rich callouts
+        useNativeAndroidCallouts={true} // Use native Android callouts to prevent height cutoff
         onPress={() => {
           if (collapseLocationListRef.current) {
             collapseLocationListRef.current();
