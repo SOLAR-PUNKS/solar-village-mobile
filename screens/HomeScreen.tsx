@@ -11,6 +11,8 @@ import Map, { DEFAULT_REGION } from '../components/Map';
 import { fetchCommunityResources, TransformedLocation } from '../utils/api';
 import { useAppContext } from '../utils/AppContext';
 import { isLocationOpen } from '../utils/businessHours';
+import { filterLocationsByDistance } from '../utils/locationFilter';
+import { MAX_LOCATION_DISTANCE_MILES } from '../utils/config';
 
 import type { LocationAccuracy } from '../components/Map';
 
@@ -39,15 +41,22 @@ export default function HomeScreen() {
 
   // Filter locations based on settings
   const filteredLocations = useMemo(() => {
-    if (!showOpenLocationsOnly) {
-      return locations;
+    // First filter by distance (configurable, default 200 miles)
+    let filtered = filterLocationsByDistance(locations, region, MAX_LOCATION_DISTANCE_MILES);
+    console.log(`🔍 Distance filter: ${locations.length} total → ${filtered.length} within ${MAX_LOCATION_DISTANCE_MILES} miles`);
+    
+    // Then filter by open status if enabled
+    if (showOpenLocationsOnly) {
+      const beforeOpenFilter = filtered.length;
+      filtered = filtered.filter(location => {
+        const { isOpen } = isLocationOpen(location.hours);
+        return isOpen;
+      });
+      console.log(`⏰ Open filter: ${beforeOpenFilter} nearby → ${filtered.length} open`);
     }
     
-    return locations.filter(location => {
-      const { isOpen } = isLocationOpen(location.hours);
-      return isOpen;
-    });
-  }, [locations, showOpenLocationsOnly]);
+    return filtered;
+  }, [locations, region, showOpenLocationsOnly]);
 
   /**
    * Optimized location loading with 3-stage approach:

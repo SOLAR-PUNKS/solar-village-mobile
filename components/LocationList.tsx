@@ -6,6 +6,7 @@ import { isLocationOpen, formatNextOpenTime } from '../utils/businessHours';
 import { TransformedLocation } from '../utils/api';
 import { useState, useRef, useEffect } from 'react';
 import { Ionicons } from '@expo/vector-icons';
+import { MAX_LOCATION_DISTANCE_MILES } from '../utils/config';
 
 const handleLocationPress = (
   latitude: number,
@@ -126,10 +127,7 @@ const LocationList = ({mapRef, onShowCallout, currentRegion, locations, isLoadin
       >
         <View style={styles.headerContent}>
           <View style={styles.headerLeft}>
-            <Text style={styles.locationsListTitle}>All Locations</Text>
-            {!isLoadingLocations && !error && locationCount > 0 && (
-              <Text style={styles.locationCount}> ({locationCount})</Text>
-            )}
+            <Text style={styles.locationsListTitle}>Nearby Locations ({locationCount})</Text>
           </View>
           <Ionicons 
             name={isExpanded ? 'chevron-down' : 'chevron-up'} 
@@ -153,7 +151,7 @@ const LocationList = ({mapRef, onShowCallout, currentRegion, locations, isLoadin
             </View>
           ) : sortedLocations.length === 0 ? (
             <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>No locations available</Text>
+              <Text style={styles.emptyText}>No locations found within {MAX_LOCATION_DISTANCE_MILES} miles</Text>
             </View>
           ) : (
             <ScrollView 
@@ -390,5 +388,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.text.secondary,
     textAlign: 'center',
+  },
+  emptySubtext: {
+    fontSize: 12,
+    color: Colors.text.secondary,
+    textAlign: 'center',
+    marginTop: 4,
+    opacity: 0.7,
   },
 });
