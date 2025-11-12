@@ -170,10 +170,10 @@ solar-village/
 
 ### Key Files
 
-- **App.tsx**: Sets up React Navigation with bottom tabs, configures Android immersive mode
+- **App.tsx**: Sets up React Navigation with bottom tabs
 - **screens/HomeScreen.tsx**: Displays map with user location, handles permissions
 - **screens/SettingsScreen.tsx**: Interactive settings with distance slider and resource toggles
-- **app.json**: Expo configuration including permissions (location, Android edge-to-edge)
+- **app.json**: Expo configuration including permissions (location access)
 - **tsconfig.json**: TypeScript compiler configuration for React Native
 
 ## 🧪 Development Notes
@@ -197,12 +197,6 @@ Users will be prompted to grant location access when the app first launches.
 
 ### Platform-Specific Features
 
-#### Android Immersive Mode
-- Hides the system navigation bar (back, home, recent apps buttons)
-- Swipe up from bottom edge to temporarily reveal
-- Auto-hides after a few seconds
-- **Requires development build** - not available in Expo Go
-
 #### Map Tiles
 - **Android**: Uses Google Maps by default
 - **iOS**: Uses Apple Maps by default
@@ -211,7 +205,6 @@ Users will be prompted to grant location access when the app first launches.
 ### Known Limitations
 
 1. **Expo Go Limitations**:
-   - Android immersive mode requires a development build
    - Some native features may not work in Expo Go
 
 2. **Map API Keys**:

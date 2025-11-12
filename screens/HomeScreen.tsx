@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, ActivityIndicator, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import MapView, { Region } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { useEffect, useState, useRef, useMemo } from 'react';
@@ -274,7 +275,7 @@ export default function HomeScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {/* Location accuracy indicator */}
       {renderLocationIndicator()}
 
@@ -321,7 +322,7 @@ export default function HomeScreen() {
       />
 
       <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -332,7 +333,7 @@ const styles = StyleSheet.create({
   },
   locationIndicator: {
     position: 'absolute',
-    top: 50,
+    top: 30, // Reduced since SafeAreaView now handles status bar offset
     left: 0,
     right: 0,
     zIndex: 1,

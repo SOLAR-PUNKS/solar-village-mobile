@@ -1,4 +1,5 @@
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 // import { useState } from 'react';
 // import Slider from '@react-native-community/slider';
 import { Button, SettingsToggle } from '../components';
@@ -26,8 +27,9 @@ export default function SettingsScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <View style={styles.container}>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.container}>
         <Text style={styles.title}>Settings</Text>
         <Text style={styles.subtitle}>Configure your app preferences</Text>
 
@@ -90,10 +92,15 @@ export default function SettingsScreen() {
         {/* <Button label="Apply" onPress={handleApply} primary /> */}
       </View>
     </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   scrollContainer: {
     flexGrow: 1,
   },

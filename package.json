@@ -3,6 +3,8 @@
   "version": "0.0.1",
   "main": "index.tsx",
   "scripts": {
+    "build:android": "docker container run -e PROFILE=production -e NODEJS_VERSION=24.11.0 -v .:/app -w /app -it universal-eas-builder",
+    "build:custom": "docker container run -e PROFILE=production -v .:/app -w /app -it solar-village-builder",
     "start": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
@@ -20,7 +22,6 @@
     "expo-font": "~14.0.9",
     "expo-image-picker": "~17.0.8",
     "expo-location": "~19.0.7",
-    "expo-navigation-bar": "~5.0.9",
     "expo-status-bar": "~3.0.8",
     "haversine": "^1.1.1",
     "react": "19.1.0",

@@ -1,9 +1,8 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import { View, StyleSheet, Platform, AppState } from 'react-native';
-import { useEffect, useRef } from 'react';
-import * as NavigationBar from 'expo-navigation-bar';
+import { StyleSheet } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import HomeScreen from './screens/HomeScreen';
 import SettingsScreen from './screens/SettingsScreen';
@@ -15,53 +14,10 @@ import { Colors } from './theme';
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-  const appState = useRef(AppState.currentState);
-
-  useEffect(() => {
-    // Configure Android immersive mode
-    if (Platform.OS === 'android') {
-      const setupNavigationBar = async () => {
-        try {
-          // Hide the navigation bar
-          await NavigationBar.setVisibilityAsync('hidden');
-
-          // Set behavior to show temporarily when swiping from bottom
-          await NavigationBar.setBehaviorAsync('overlay-swipe');
-
-          // Optional: Set navigation bar to be transparent when it appears
-          await NavigationBar.setBackgroundColorAsync('#00000000');
-        } catch (error) {
-          console.log('Error setting up navigation bar:', error);
-        }
-      };
-
-      setupNavigationBar();
-
-      // Re-hide navigation bar when app becomes active
-      const subscription = AppState.addEventListener('change', async (nextAppState) => {
-        if (
-          appState.current.match(/inactive|background/) &&
-          nextAppState === 'active'
-        ) {
-          // App has come to the foreground, re-hide navigation bar
-          try {
-            await NavigationBar.setVisibilityAsync('hidden');
-          } catch (error) {
-            console.log('Error re-hiding navigation bar:', error);
-          }
-        }
-        appState.current = nextAppState;
-      });
-
-      return () => {
-        subscription.remove();
-      };
-    }
-  }, []);
-
   return (
-    <AppProvider>
-      <NavigationContainer>
+    <SafeAreaProvider>
+      <AppProvider>
+        <NavigationContainer>
         <Tab.Navigator
         initialRouteName="Home"
         screenOptions={({ route }) => ({
@@ -72,7 +28,6 @@ export default function App() {
 
             if (route.name === 'Home') {
               iconName = focused ? 'map' : 'map-outline';
-              // iconSize = 40; // Larger size for Home icon
             } else if (route.name === 'Settings') {
               iconName = focused ? 'settings' : 'settings-outline';
             } else if (route.name === 'Chat') {
@@ -82,13 +37,13 @@ export default function App() {
             }
 
             // Wrap Home icon in a special container for elevation
-            if (route.name === 'Home') {
-              return (
-                <View style={styles.homeIconContainer}>
-                  <Ionicons name={iconName} size={iconSize} color={color} />
-                </View>
-              );
-            }
+            // if (route.name === 'Home') {
+            //   return (
+            //     <View style={styles.homeIconContainer}>
+            //       <Ionicons name={iconName} size={iconSize} color={color} />
+            //     </View>
+            //   );
+            // }
 
             return <Ionicons name={iconName} size={iconSize} color={color} />;
           },
@@ -120,10 +75,14 @@ export default function App() {
         </Tab.Navigator>
       </NavigationContainer>
     </AppProvider>
+    </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+  },
   homeIconContainer: {
     alignItems: 'center',
     justifyContent: 'center',
