@@ -2,6 +2,7 @@
 
 import { USE_LOCAL_TEST_DATA } from './config';
 import { TEST_LOCATIONS } from './testData';
+import laData from './la_data.json';
 
 const API_BASE_URL = 'https://solar-village-backend.onrender.com/api';
 
@@ -38,6 +39,18 @@ export interface ApiResponse {
   results: ApiLocation[];
 }
 
+// Add interface for LA data structure
+interface LaDataItem {
+  Name: string;
+  Notes: string;
+  "Address Short": string;
+  "City State Zip": string;
+  "Address Consolidated": string;
+  Latitude: number;
+  Longitude: number;
+}
+
+// Extend TransformedLocation to include notes field
 export interface TransformedLocation {
   key: string;
   id: number;
@@ -57,6 +70,7 @@ export interface TransformedLocation {
   website?: string;
   resource_type?: string;
   resource_type_display?: string;
+  notes?: string; // Add notes field
 }
 
 /**
@@ -125,6 +139,47 @@ export const transformApiLocation = (apiLocation: ApiLocation): TransformedLocat
 };
 
 /**
+ * Transform LA data to app location format
+ */
+export const transformLaDataLocation = (laLocation: LaDataItem, index: number): TransformedLocation => {
+  // Create key from coordinates
+  const key = `${laLocation.Name} - ${laLocation["Address Short"]} - ${laLocation.Latitude}, ${laLocation.Longitude}`;
+  
+  // TODO -- fix keys and ids
+  return {
+    key,
+    id: index + 10000, // Start IDs at 10000 to avoid conflicts with API data
+    title: laLocation.Name,
+    description: laLocation.Notes || '',
+    coordinates: {
+      latitude: laLocation.Latitude,
+      longitude: laLocation.Longitude,
+    },
+    address: laLocation["Address Consolidated"],
+    notes: laLocation.Notes,
+    resource_type: 'food',
+    resource_type_display: 'Food Bank',
+  };
+};
+
+/**
+ * Load and transform LA data from local JSON file
+ */
+export const loadLaData = (): TransformedLocation[] => {
+  try {
+    const transformedLocations = (laData as LaDataItem[]).map((location, index) => 
+      transformLaDataLocation(location, index)
+    );
+    
+    console.log(`📍 Loaded ${transformedLocations.length} locations from LA data`);
+    return transformedLocations;
+  } catch (error) {
+    console.error('Error loading LA data:', error);
+    return [];
+  }
+};
+
+/**
  * Fetch community resources from the API
  * Falls back to local test data if the global flag is set or if the API fails
  */
@@ -132,7 +187,8 @@ export const fetchCommunityResources = async (): Promise<TransformedLocation[]> 
   // Check if we should use local test data
   if (USE_LOCAL_TEST_DATA) {
     console.log('📍 Using local test data (flag enabled)');
-    return TEST_LOCATIONS;
+    // return TEST_LOCATIONS;
+    return loadLaData();
   }
 
   try {

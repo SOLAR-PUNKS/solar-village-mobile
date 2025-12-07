@@ -141,7 +141,7 @@ const Map = ({locationAccuracy, ref, region, onMapReady, locations, isLoadingLoc
         onCalloutPress={(useSimpleCallouts || useNativeAndroidCallouts) ? () => {
           Alert.alert(
             location.title,
-            `${location.address}\n\n${getTodayHours(location.hours)}\n\nWould you like directions to this location?`,
+            `${location.address}\n\n${location.notes}\n\nWould you like directions to this location?`,
             [
               { text: 'Cancel', style: 'cancel' },
               { 
@@ -187,7 +187,7 @@ const Map = ({locationAccuracy, ref, region, onMapReady, locations, isLoadingLoc
             onPress={() => {
               Alert.alert(
                 location.title,
-                `${location.address}\n\n${getTodayHours(location.hours)}\n\nWould you like directions to this location?`,
+                `${location.address}\n\n${location.notes}\n\nWould you like directions to this location?`,
                 [
                   { text: 'Cancel', style: 'cancel' },
                   { 

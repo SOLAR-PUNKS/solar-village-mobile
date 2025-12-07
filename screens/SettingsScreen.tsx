@@ -7,7 +7,12 @@ import { Colors } from '../theme';
 import { useAppContext } from '../utils/AppContext';
 
 export default function SettingsScreen() {
-  const { showOpenLocationsOnly, setShowOpenLocationsOnly } = useAppContext();
+  const {
+    // showOpenLocationsOnly, 
+    // setShowOpenLocationsOnly,
+    showNearbyLocationsOnly,
+    setShowNearbyLocationsOnly
+  } = useAppContext();
   
   // State management
   // const [distance, setDistance] = useState<number>(30);
@@ -19,7 +24,7 @@ export default function SettingsScreen() {
   const handleApply = () => {
     console.log('Settings Applied:');
     // console.log('Distance:', distance, 'miles');
-    console.log('Show Open Locations Only:', showOpenLocationsOnly);
+    // console.log('Show Open Locations Only:', showOpenLocationsOnly);
     // console.log('Show Food:', showFood);
     // console.log('Show Hygiene:', showHygiene);
     // console.log('Show Clothing:', showClothing);
@@ -27,7 +32,7 @@ export default function SettingsScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.container}>
         <Text style={styles.title}>Settings</Text>
@@ -59,10 +64,15 @@ export default function SettingsScreen() {
           <Text style={styles.sectionDescription}>
             Control which locations are displayed on the map and in the list
           </Text>
-          <SettingsToggle
+          {/* <SettingsToggle
             label="Show only open locations"
             value={showOpenLocationsOnly}
             onChange={setShowOpenLocationsOnly}
+          /> */}
+          <SettingsToggle
+            label="Show only locations in my area (200mi)"
+            value={showNearbyLocationsOnly}
+            onChange={setShowNearbyLocationsOnly}
           />
         </View>
 

@@ -196,7 +196,8 @@ const LocationList = ({mapRef, onShowCallout, currentRegion, locations, isLoadin
                       <Text style={styles.locationDistance}>{distanceText}</Text>
                     </View>
                     <View style={styles.locationCardContent}>
-                      <Text style={styles.locationHours}>{hoursText}</Text>
+                      <Text style={styles.locationHours}>{location.notes}</Text>
+                      {/* <Text style={styles.locationHours}>{hoursText}</Text>
                       {status && (
                         <Text
                           style={[
@@ -206,7 +207,7 @@ const LocationList = ({mapRef, onShowCallout, currentRegion, locations, isLoadin
                         >
                           {status}
                         </Text>
-                      )}
+                      )} */}
                     </View>
                   </TouchableOpacity>
                 );

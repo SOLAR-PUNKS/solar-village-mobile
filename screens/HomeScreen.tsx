@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, ActivityIndicator, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MapView, { Region } from 'react-native-maps';
@@ -18,7 +17,7 @@ import { MAX_LOCATION_DISTANCE_MILES } from '../utils/config';
 import type { LocationAccuracy } from '../components/Map';
 
 export default function HomeScreen() {
-  const { showOpenLocationsOnly } = useAppContext();
+  const { showOpenLocationsOnly, showNearbyLocationsOnly } = useAppContext();
   
   // Start with default region for immediate render
   const [region, setRegion] = useState<Region>(DEFAULT_REGION);
@@ -43,21 +42,29 @@ export default function HomeScreen() {
   // Filter locations based on settings
   const filteredLocations = useMemo(() => {
     // First filter by distance (configurable, default 200 miles)
-    let filtered = filterLocationsByDistance(locations, region, MAX_LOCATION_DISTANCE_MILES);
-    console.log(`🔍 Distance filter: ${locations.length} total → ${filtered.length} within ${MAX_LOCATION_DISTANCE_MILES} miles`);
-    
-    // Then filter by open status if enabled
-    if (showOpenLocationsOnly) {
-      const beforeOpenFilter = filtered.length;
-      filtered = filtered.filter(location => {
-        const { isOpen } = isLocationOpen(location.hours);
-        return isOpen;
-      });
-      console.log(`⏰ Open filter: ${beforeOpenFilter} nearby → ${filtered.length} open`);
+    // let filtered = filterLocationsByDistance(locations, region, MAX_LOCATION_DISTANCE_MILES);
+    // console.log(`🔍 Distance filter: ${locations.length} total → ${filtered.length} within ${MAX_LOCATION_DISTANCE_MILES} miles`);
+    let filtered = locations;
+
+    // Filter by distance if enabled
+    if (showNearbyLocationsOnly) {
+      const beforeDistanceFilter = filtered.length;
+      filtered = filterLocationsByDistance(filtered, region, MAX_LOCATION_DISTANCE_MILES);
+      console.log(`🔍 Distance filter: ${beforeDistanceFilter} total → ${filtered.length} within ${MAX_LOCATION_DISTANCE_MILES} miles`);
     }
     
+    // // Then filter by open status if enabled
+    // if (showOpenLocationsOnly) {
+    //   const beforeOpenFilter = filtered.length;
+    //   filtered = filtered.filter(location => {
+    //     const { isOpen } = isLocationOpen(location.hours);
+    //     return isOpen;
+    //   });
+    //   console.log(`⏰ Open filter: ${beforeOpenFilter} nearby → ${filtered.length} open`);
+    // }
+    
     return filtered;
-  }, [locations, region, showOpenLocationsOnly]);
+  }, [locations, region, showOpenLocationsOnly, showNearbyLocationsOnly]);
 
   /**
    * Optimized location loading with 3-stage approach:
@@ -275,7 +282,7 @@ export default function HomeScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       {/* Location accuracy indicator */}
       {renderLocationIndicator()}
 
@@ -296,8 +303,8 @@ export default function HomeScreen() {
       />
       {/* <Button label="Submit New Report" onPress={handleOpenModal} primary /> */}
 
-      <LocationList 
-        mapRef={mapRef} 
+      <LocationList
+        mapRef={mapRef}
         onShowCallout={handleShowMarkerCallout}
         currentRegion={region}
         locations={filteredLocations}
@@ -320,8 +327,6 @@ export default function HomeScreen() {
         type={toast.type}
         onHide={handleHideToast}
       />
-
-      <StatusBar style="auto" />
     </SafeAreaView>
   );
 }
